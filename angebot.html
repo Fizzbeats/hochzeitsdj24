@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<noscript><style>.reveal,.split__inhalt,.split__frage,.hero__strich{opacity:1!important;transform:none!important;max-height:none!important}</style></noscript>
+<title>Angebotserstellung — HochzeitsDJ24</title>
+<meta name="description" content="Beantworten Sie einige Fragen zu Ihrer Feier – wir erstellen daraus Ihr persönliches Angebot.">
+<meta name="robots" content="noindex">
+
+<link rel="stylesheet" href="fonts.css?v=20260801b3">
+
+<link rel="stylesheet" href="style.css?v=20260801b3">
+<link rel="stylesheet" href="app.css?v=20260801b3">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+
+<section class="page-head">
+  <div class="shell">
+    <p class="kicker">Angebotserstellung</p>
+    <h1>Ihr Angebot,<br>aus Ihren Angaben</h1>
+    <p>
+      Ein paar Fragen zu Ihrer Feier, mehr brauchen wir nicht. Jens setzt daraus Ihr
+      Angebot auf, schaut persönlich drüber und gibt es für Sie frei — mit allen
+      Preisen schwarz auf weiß, bevor Sie sich festlegen. Erst wenn Sie das Angebot
+      annehmen, wird daraus ein Vertrag.
+    </p>
+    <p class="f__hint" id="paketHinweis" style="display:none;margin-top:14px"></p>
+  </div>
+</section>
+
+<section class="progress">
+  <div class="shell">
+    <div class="progress__bar"><div class="progress__fill" id="fill"></div></div>
+    <div class="progress__meta">
+      <span id="stepName">Kontaktdaten</span>
+      <span><span id="stepNo">1</span> / <span id="stepTotal">6</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="wizard">
+  <div class="shell">
+    <form id="wizard" novalidate>
+
+      <!-- ---------- 1 ---------- -->
+      <div class="step is-active" data-step="1" data-name="Kontaktdaten">
+        <div class="step__head">
+          <h2>Wer feiert?</h2>
+          <p>Damit wir wissen, wer im Angebot steht — und wen wir anrufen dürfen.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="f"><label for="vorname">Vorname *</label><input id="vorname" name="vorname" required></div>
+          <div class="f"><label for="nachname">Name *</label><input id="nachname" name="nachname" required></div>
+        </div>
+        <div class="f"><label for="strasse">Straße und Hausnummer *</label><input id="strasse" name="strasse" required></div>
+        <div class="grid-2">
+          <div class="f"><label for="plz">PLZ *</label><input id="plz" name="plz" inputmode="numeric" pattern="\d{5}" maxlength="5" placeholder="z. B. 09113" required></div>
+          <div class="f"><label for="ort">Wohnort *</label><input id="ort" name="ort" required></div>
+        </div>
+        <div class="grid-2">
+          <div class="f"><label for="email">E-Mail *</label><input type="email" id="email" name="email" required></div>
+          <div class="f"><label for="telefon">Telefon für Rückruf</label><input type="tel" id="telefon" name="telefon"></div>
+        </div>
+      </div>
+
+      <!-- ---------- 2 ---------- -->
+      <div class="step" data-step="2" data-name="Anlass und Termin">
+        <div class="step__head">
+          <h2>Anlass und Termin</h2>
+          <p>Wann und wo soll gefeiert werden?</p>
+        </div>
+
+        <div class="opts">
+          <label class="opt"><input type="radio" name="anlass" value="Hochzeit" checked><span class="opt__mark"></span>
+            <div class="opt__title">Hochzeit</div><p class="opt__desc">Der komplette Tag von Sektempfang bis Party.</p></label>
+          <label class="opt"><input type="radio" name="anlass" value="Firmenevent"><span class="opt__mark"></span>
+            <div class="opt__title">Firmenevent</div><p class="opt__desc">Jubiläum, Weihnachtsfeier oder Betriebsfest.</p></label>
+          <label class="opt"><input type="radio" name="anlass" value="Geburtstag"><span class="opt__mark"></span>
+            <div class="opt__title">Geburtstag</div><p class="opt__desc">Runder Geburtstag oder private Feier.</p></label>
+          <label class="opt"><input type="radio" name="anlass" value="Sonstiges"><span class="opt__mark"></span>
+            <div class="opt__title">Sonstiges</div><p class="opt__desc">Ein anderer Anlass – Details gern bei „Anmerkungen" im letzten Schritt.</p></label>
+        </div>
+
+        <div class="f" id="geburtstagFeld" style="display:none">
+          <label for="geburtstagszahl">Der wievielte Geburtstag?</label>
+          <input type="number" id="geburtstagszahl" name="geburtstagszahl" min="1" max="120" placeholder="z. B. 30">
+        </div>
+
+        <div class="grid-2">
+          <div class="f"><label for="datum">Datum der Feier *</label><input type="date" id="datum" name="datum" required>
+            <p class="f__hint" id="tagHint"></p></div>
+          <div class="f"><label for="gaeste">Anzahl der Gäste</label><input type="number" id="gaeste" name="gaeste" min="1" max="2000"></div>
+        </div>
+        <div class="f"><label for="location">Location / Veranstaltungsort *</label><input id="location" name="location" required></div>
+        <div class="f"><label for="location_adresse">Adresse der Location</label><input id="location_adresse" name="location_adresse"></div>
+      </div>
+
+      <!-- ---------- 3 ---------- -->
+      <div class="step" data-step="3" data-name="Zeiten">
+        <div class="step__head">
+          <h2>Wann geht's los?</h2>
+          <p>Grobe Zeiten reichen völlig — die Feinheiten klären wir sowieso noch persönlich.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="f"><label for="aufbau_von">Aufbau ab</label><input type="time" id="aufbau_von" name="aufbau_von" value="15:00"></div>
+          <div class="f"><label for="aufbau_bis">Aufbau fertig bis</label><input type="time" id="aufbau_bis" name="aufbau_bis" value="16:00"></div>
+        </div>
+
+        <div class="f" style="margin-bottom:12px"><label>Empfang und Dinner (Hintergrundmusik)</label></div>
+        <div class="grid-2">
+          <div class="f"><label for="empfang_von">Beginn</label><input type="time" id="empfang_von" name="empfang_von" value="16:00"></div>
+          <div class="f"><label for="empfang_bis">Ende</label><input type="time" id="empfang_bis" name="empfang_bis" value="17:00"></div>
+        </div>
+
+        <div class="f" style="margin-bottom:12px"><label>Party</label></div>
+        <div class="grid-2">
+          <div class="f"><label for="party_von">Beginn</label><input type="time" id="party_von" name="party_von" value="17:00"></div>
+          <div class="f"><label for="party_bis">Ende (auch nach Mitternacht)</label><input type="time" id="party_bis" name="party_bis" value="01:00"></div>
+        </div>
+
+        <label class="opt" style="display:block">
+          <input type="checkbox" name="open_end"><span class="opt__mark"></span>
+          <div class="opt__title">Party Open End</div>
+          <p class="opt__desc">Kein festes Ende – ab 1 Uhr spielen wir pauschal für 100&nbsp;€ weiter, solange gefeiert wird.</p>
+        </label>
+      </div>
+
+      <!-- ---------- 4 ---------- -->
+      <div class="step" data-step="4" data-name="Leistungen">
+        <div class="step__head">
+          <h2>Gewünschte Leistungen</h2>
+          <p>Was soll neben der Musik dabei sein?</p>
+        </div>
+
+        <div class="f" style="margin-bottom:12px"><label>Ton- und Lichttechnik</label></div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="technik_variante" value="A" checked><span class="opt__mark"></span>
+            <div class="opt__title">Technik Variante A</div>
+            <p class="opt__desc">Die bewährte Anlage für die meisten Feiern.</p>
+            <p class="opt__more">2 Boxen, LED-Lichttechnik und ein Funkmikrofon für Reden und Spiele — passend für Räume bis etwa 100 Gäste.</p></label>
+
+          <label class="opt"><input type="radio" name="technik_variante" value="B"><span class="opt__mark"></span>
+            <div class="opt__title">Technik Variante B</div>
+            <p class="opt__desc">Die große Anlage für große Säle und Programme.</p>
+            <p class="opt__more">Erweiterte Beschallung mit zusätzlichen Boxen, LED-Lichttechnik, vier Funkmikrofonen und Floorspots in Ihrer Wunschfarbe.</p></label>
+
+          <label class="opt"><input type="radio" name="technik_variante" value="keine"><span class="opt__mark"></span>
+            <div class="opt__title">Ohne Technik</div>
+            <p class="opt__desc">Vor Ort ist bereits eine Anlage vorhanden.</p>
+            <p class="opt__more">Wir bringen nur die Abspieltechnik mit und schließen uns an die vorhandene Anlage Ihrer Location an.</p></label>
+        </div>
+
+        <div class="f" style="margin-bottom:12px"><label>Programm und Extras</label></div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="entertainment"><span class="opt__mark"></span>
+            <div class="opt__title">Entertainmentprogramm</div>
+            <p class="opt__desc" id="entertainmentDesc">Moderation von Spielen, Torte, Brautstraußwerfen und weiteren Programmpunkten.</p>
+            <p class="opt__more">Wir führen als Moderatoren durch den Abend: Hochzeitsspiele mit Brautpaar und Trauzeugen, Anschneiden der Torte, Brautstraußwerfen — alles nach Ihren Vorgaben, dezent statt marktschreierisch.</p></label>
+
+          <label class="opt"><input type="checkbox" name="kinderanimation"><span class="opt__mark"></span>
+            <div class="opt__title">Kinderanimation</div>
+            <p class="opt__desc">30–60 Minuten Programm für die kleinen Gäste.</p>
+            <p class="opt__more">Spiele, Tanzrunden und Beschäftigung für die Kinder, während die Großen feiern — Umfang und Preis stimmen wir im Angebot auf Ihre Feier ab.</p></label>
+
+          <label class="opt"><input type="checkbox" name="fotobox_standard"><span class="opt__mark"></span>
+            <div class="opt__title">Fotobox Standard</div>
+            <p class="opt__desc">Alle Bilder digital per E-Mail.</p>
+            <p class="opt__more">Die Fotobox steht den ganzen Abend bereit, mit Requisiten. Alle Aufnahmen erhalten Sie gesammelt digital per E-Mail — ohne Ausdruck vor Ort.</p></label>
+
+          <label class="opt"><input type="checkbox" name="fotobox_deluxe"><span class="opt__mark"></span>
+            <div class="opt__title">Fotobox Deluxe</div>
+            <p class="opt__desc">Digitale Bilder plus Sofortausdruck vor Ort.</p>
+            <p class="opt__more">Wie Standard — zusätzlich drucken Ihre Gäste bis zu 108 Bilder direkt vor Ort aus und nehmen sie als Erinnerung mit.</p></label>
+
+          <label class="opt"><input type="checkbox" name="remix"><span class="opt__mark"></span>
+            <div class="opt__title">Hochzeitstanz Produktion</div>
+            <p class="opt__desc" id="remixDesc">Ihr Lied für den ersten Tanz, individuell für Sie produziert. 50&nbsp;€ inklusive zwei Korrekturschleifen, jede weitere 10&nbsp;€.</p>
+            <p class="opt__more">In Zusammenarbeit mit professionellen Musikproduzenten: langsamer zum Einstieg, eigenes Arrangement oder fließender Übergang in die Party — abgestimmt auf Ihre Choreografie, auf Wunsch als Aufnahme zum Behalten.</p></label>
+        </div>
+
+        <div class="f" id="eroeffnungstanzFeld"><label for="eroeffnungstanz">Lied für den Eröffnungstanz</label>
+          <input id="eroeffnungstanz" name="eroeffnungstanz" placeholder="Titel und Interpret, falls schon bekannt"></div>
+
+        <!-- Automatische Paket-Empfehlung, live während der Eingabe -->
+        <div class="notice" id="empfehlungBox" style="display:none;margin-top:32px">
+          <h4 id="empfehlungTitel"></h4>
+          <p id="empfehlungText"></p>
+          <button type="button" class="btn btn--gold" id="empfehlungUebernehmen" style="margin-top:18px"></button>
+        </div>
+      </div>
+
+      <!-- ---------- 5 ---------- -->
+      <div class="step" data-step="5" data-name="Musik und Wünsche">
+        <div class="step__head">
+          <h2>Ihre Musik</h2>
+          <p>Was soll laufen, was auf keinen Fall? Hier dürfen Sie ehrlich sein.</p>
+        </div>
+
+        <div class="f"><label for="stile">Bevorzugte Musikrichtungen</label>
+          <input id="stile" name="stile" placeholder="z. B. Charts, 80er, Schlager, Rock, Discofox"></div>
+        <div class="f"><label for="wuensche">Lieder, die auf jeden Fall laufen sollen</label>
+          <textarea id="wuensche" name="wuensche" rows="3"></textarea></div>
+        <div class="f"><label for="nogos">Lieder oder Styles, die nicht laufen sollen</label>
+          <textarea id="nogos" name="nogos" rows="3"></textarea></div>
+        <div class="f"><label for="anmerkungen">Weitere Anmerkungen</label>
+          <textarea id="anmerkungen" name="anmerkungen" rows="4" placeholder="Besonderheiten der Location, Stromanschlüsse, Uhrzeiten, Überraschungen …"></textarea></div>
+      </div>
+
+      <!-- ---------- 6 ---------- -->
+      <div class="step" data-step="6" data-name="Prüfen und senden">
+        <div class="step__head">
+          <h2>Einmal kurz prüfen</h2>
+          <p>Stimmt alles? Dann fehlt nur noch ein Klick.</p>
+        </div>
+
+        <div id="summary"></div>
+
+        <!-- Konto anlegen, falls noch nicht angemeldet -->
+        <div class="notice" id="kontoBox" style="display:none">
+          <h4>Konto anlegen? Nur wenn Sie möchten</h4>
+          <p style="margin-bottom:22px">
+            Sie können Ihr Angebot ganz ohne Anmeldung anfordern – wir melden uns dann per E-Mail.
+            Mit einem Konto bleiben Ihre Angaben zusätzlich gespeichert und Sie sehen jederzeit,
+            wie weit Ihre Anfrage ist; sobald Ihr Angebot freigegeben ist, laden Sie es dort als
+            PDF herunter.
+          </p>
+
+          <label class="consent" style="margin:0 0 20px">
+            <input type="checkbox" id="kontoWunsch">
+            <span>Ja, Konto anlegen für <strong id="kontoMail">Ihre E-Mail-Adresse</strong></span>
+          </label>
+
+          <div id="kontoFelder" class="grid-2" style="display:none">
+            <div class="f"><label for="kontoPw">Passwort (mind. 8 Zeichen)</label>
+              <input type="password" id="kontoPw" autocomplete="new-password"></div>
+            <div class="f"><label for="kontoPw2">Passwort wiederholen</label>
+              <input type="password" id="kontoPw2" autocomplete="new-password"></div>
+          </div>
+          <p class="auth__error" id="kontoError"></p>
+        </div>
+
+        <!-- Hinweis, wenn bereits angemeldet -->
+        <div class="notice" id="angemeldetBox" style="display:none">
+          <h4>Angemeldet</h4>
+          <p>Ihre Anfrage wird Ihrem Konto <strong id="angemeldetMail"></strong> zugeordnet.
+             Sie finden sie anschließend jederzeit im Kundenbereich.</p>
+        </div>
+
+        <div class="notice">
+          <h4>Wir empfehlen ein persönliches Gespräch</h4>
+          <p>
+            Dieses Angebot entsteht allein aus Ihren Angaben. Bevor daraus ein Vertrag wird, empfehlen wir
+            ausdrücklich ein persönliches Gespräch, in dem wir Ablauf, Musikwünsche und die technischen
+            Gegebenheiten Ihrer Location gemeinsam durchgehen. Erfahrungsgemäß ergeben sich dabei
+            Details, die den Abend deutlich besser machen.
+          </p>
+        </div>
+
+        <label class="consent">
+          <input type="checkbox" id="consent" required>
+          <span>
+            Ich bin damit einverstanden, dass meine Angaben zur Erstellung und Prüfung des Angebots
+            gespeichert und verarbeitet werden. Die Daten werden nach der Veranstaltung gelöscht;
+            das Rechnungsdokument unterliegt den gesetzlichen Aufbewahrungsfristen.
+            Näheres in der <a href="datenschutz.html" style="border-bottom:1px solid var(--gold)">Datenschutzerklärung</a>.
+          </span>
+        </label>
+      </div>
+
+      <div class="wizard__nav" id="nav-buttons">
+        <button type="button" class="btn btn--ghost" id="back">← Zurück</button>
+        <button type="button" class="btn btn--gold" id="next">Weiter</button>
+      </div>
+    </form>
+
+    <!-- ---------- Erfolg ---------- -->
+    <div class="done" id="done">
+      <div class="done__mark">✓</div>
+      <h2>Vielen Dank</h2>
+      <p id="doneText">
+        Ihre Angaben sind bei uns eingegangen. Jens Winter prüft Ihr Angebot persönlich und
+        gibt es anschließend frei – Sie erhalten dann eine E-Mail von uns.
+        Für Rückfragen erreichen Sie uns unter 0176 – 77 444 888.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell footer__base" style="border-top:0">
+    <p>© <span id="jahr"></span> HochzeitsDJ24</p>
+    <p><a href="index.html">Zur Startseite</a> · <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=20260801b3"></script>
+<script src="pdf.js?v=20260801b3"></script>
+<script src="daten.js?v=20260801b3"></script>
+<script src="nav.js?v=20260801b3"></script>
+<script src="angebot.js?v=20260801b3"></script>
+</body>
+</html>

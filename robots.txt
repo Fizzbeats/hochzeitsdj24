@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /entwicklung.html
+
+Sitemap: https://www.hochzeitsdj24.de/sitemap.xml

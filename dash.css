@@ -1,0 +1,297 @@
+/* =====================================================
+   HochzeitsDJ24 — DJ-Dashboard (interner Bereich)
+   Dunkel, Karten mit weichen Schatten, goldene Akzente
+   ===================================================== */
+
+body.dash-body {
+  background:
+    radial-gradient(ellipse 900px 500px at 85% -10%, rgba(180, 144, 31, 0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 400px at 0% 100%, rgba(120, 132, 160, 0.06) 0%, transparent 60%),
+    #121110;
+  color: #f2efe9;
+  min-height: 100vh;
+}
+body.dash-body { --line: rgba(255, 255, 255, 0.09); }
+
+/* ---------- Ladeschirm ---------- */
+.ladeschirm {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #121110;
+  transition: opacity 0.5s var(--ease);
+}
+.ladeschirm--weg { opacity: 0; pointer-events: none; }
+
+/* ---------- Cockpit-Führung: ganze Box hervorheben ----------
+   Statt eines kleinen Lichtkreises wird hier die komplette Karte/Box
+   freigestellt, alles ringsherum dunkel abgedeckt — über einen riesigen
+   box-shadow, der sich automatisch der Form/Größe des Ziels anpasst. */
+.cockpit-tour-ziel {
+  position: relative;
+  z-index: 401;
+  border-radius: 16px;
+  box-shadow: 0 0 0 6px rgba(201, 162, 39, 0.55), 0 0 0 9999px rgba(8, 7, 6, 0.74);
+  transition: box-shadow 0.5s var(--ease);
+}
+.ladeschirm__marke {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: #f2efe9;
+  margin: 0;
+}
+.ladeschirm__marke span { color: var(--gold); }
+.ladeschirm__text {
+  font-size: 0.87rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 233, 0.5);
+  margin: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+/* Header auf dem Dashboard dunkel */
+body.dash-body .header--solid {
+  background: rgba(18, 17, 16, 0.8);
+  backdrop-filter: blur(18px);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+body.dash-body .header--solid .wordmark,
+body.dash-body .header--solid .burger,
+body.dash-body .header--solid .header__loginlink { color: #f2efe9; }
+body.dash-body .auth__card {
+  background: #1c1a18;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+body.dash-body .auth__card h2, body.dash-body .tab.is-active { color: #f2efe9; }
+body.dash-body .f input, body.dash-body .f select {
+  background: #262320;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f2efe9;
+}
+
+/* ---------- Grundraster ---------- */
+.dash { padding: 128px 0 90px; }
+.dash__shell { max-width: 1360px; margin: 0 auto; padding: 0 clamp(20px, 3vw, 44px); }
+
+.dash__kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+.dash__gruss { font-family: var(--font-display); font-size: clamp(1.7rem, 3vw, 2.4rem); margin: 0; }
+.dash__datum { color: rgba(242, 239, 233, 0.5); font-size: 0.92rem; margin: 4px 0 0; }
+.dash__aktionen { display: flex; gap: 10px; }
+
+/* ---------- Karten ---------- */
+.karte {
+  background: linear-gradient(165deg, #1e1c19 0%, #191715 100%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 16px 40px rgba(0, 0, 0, 0.35);
+  padding: 26px 28px;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+}
+.karte--klick { cursor: pointer; }
+.karte--klick:hover {
+  transform: translateY(-3px);
+  border-color: rgba(180, 144, 31, 0.35);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 26px 60px rgba(0, 0, 0, 0.5);
+}
+
+.karte__titel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 233, 0.62);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.karte__titel svg { opacity: 0.7; }
+
+/* ---------- Kennzahlen-Reihe ---------- */
+.dash__kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.kpi__wert {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  line-height: 1.05;
+  color: #f2efe9;
+}
+.kpi__wert em { font-style: normal; color: var(--gold); }
+.kpi__zusatz { font-size: 0.85rem; color: rgba(242, 239, 233, 0.6); margin-top: 8px; }
+.kpi__zusatz strong { color: #7fb069; font-weight: 600; }
+.kpi__zusatz .warn { color: #d8925e; font-weight: 600; }
+
+/* ---------- Hauptraster ---------- */
+.dash__haupt {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+/* Neuester Vertrag — die große Bühne */
+.feature { position: relative; overflow: hidden; }
+.feature::before {
+  content: "";
+  position: absolute;
+  top: -70px; right: -70px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(180, 144, 31, 0.16) 0%, transparent 68%);
+  pointer-events: none;
+}
+.feature__status {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+.feature__status--neu  { background: rgba(180, 144, 31, 0.16); color: #e0bd52; }
+.feature__status--frei { background: rgba(127, 176, 105, 0.14); color: #9fce8a; }
+.feature__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  margin: 0 0 6px;
+}
+.feature__meta { color: rgba(242, 239, 233, 0.55); font-size: 0.94rem; margin: 0 0 20px; }
+.feature__zahlen { display: flex; gap: 34px; margin-bottom: 24px; flex-wrap: wrap; }
+.feature__zahl span { display: block; font-size: 0.78rem; color: rgba(242,239,233,0.6); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.feature__zahl strong { font-family: var(--font-display); font-size: 1.35rem; font-weight: 400; color: var(--gold); }
+.feature .btn { padding: 14px 30px; font-size: 0.78rem; }
+
+/* ---------- Listen in Karten ---------- */
+.dliste { list-style: none; margin: 0; padding: 0; }
+.dliste li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: background 0.25s;
+  border-radius: 8px;
+}
+.dliste li:hover { background: rgba(255, 255, 255, 0.03); }
+.dliste li:first-child { border-top: 0; }
+
+.dliste__datum {
+  flex-shrink: 0;
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: rgba(180, 144, 31, 0.1);
+  border: 1px solid rgba(180, 144, 31, 0.22);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  line-height: 1.05;
+}
+.dliste__datum strong { display: block; font-size: 1.15rem; font-family: var(--font-display); color: #e8cd77; }
+.dliste__datum span { display: block; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,239,233,0.65); }
+
+.dliste__text { flex: 1; min-width: 0; }
+.dliste__text strong { display: block; font-size: 0.98rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dliste__text span { font-size: 0.84rem; color: rgba(242, 239, 233, 0.6); }
+
+.dliste__wert { flex-shrink: 0; text-align: right; }
+.dliste__wert strong { display: block; font-size: 0.98rem; color: var(--gold); font-variant-numeric: tabular-nums; }
+.dliste__wert span { font-size: 0.78rem; color: rgba(242, 239, 233, 0.55); }
+.dliste__wert .faellig { color: #d8925e; }
+
+.dliste--leer { color: rgba(242, 239, 233, 0.55); font-size: 0.9rem; padding: 14px 0; }
+
+/* ---------- Umsatzbalken ---------- */
+.umsatz { display: flex; align-items: flex-end; gap: 6px; height: 130px; margin-top: 10px; }
+.umsatz__monat { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; }
+.umsatz__balken {
+  width: 100%;
+  max-width: 30px;
+  border-radius: 6px 6px 3px 3px;
+  background: linear-gradient(to top, rgba(180, 144, 31, 0.5), #e0bd52);
+  min-height: 3px;
+  transition: height 0.9s var(--ease);
+  box-shadow: 0 4px 14px rgba(180, 144, 31, 0.22);
+}
+.umsatz__monat.ist-leer .umsatz__balken { background: rgba(255, 255, 255, 0.07); box-shadow: none; }
+.umsatz__label { font-size: 0.74rem; letter-spacing: 0.06em; color: rgba(242, 239, 233, 0.6); text-transform: uppercase; }
+.umsatz__summe { font-family: var(--font-display); font-size: 1.5rem; color: #f2efe9; margin: 4px 0 0; }
+.umsatz__summe small { font-size: 0.84rem; font-family: var(--font-text); color: rgba(242,239,233,0.6); margin-left: 8px; }
+
+/* ---------- Equalizer-Deko ---------- */
+.karte__eq { display: inline-flex; align-items: flex-end; gap: 2.5px; height: 13px; }
+.karte__eq i { width: 2.5px; background: var(--gold); display: block; animation: eqTanz 1.2s ease-in-out infinite; }
+.karte__eq i:nth-child(1) { height: 45%; }
+.karte__eq i:nth-child(2) { height: 95%; animation-delay: 0.15s; }
+.karte__eq i:nth-child(3) { height: 65%; animation-delay: 0.3s; }
+
+/* ---------- Anfragenliste unten ---------- */
+.dash__tabelle { margin-top: 18px; }
+body.dash-body .admin__list th { color: rgba(242, 239, 233, 0.6); border-bottom-color: rgba(255,255,255,0.08); }
+body.dash-body .admin__list td { border-bottom-color: rgba(255,255,255,0.06); }
+body.dash-body .admin__list tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+body.dash-body .tag { border-color: rgba(255,255,255,0.2); color: rgba(242,239,233,0.6); }
+body.dash-body .tag--neu { border-color: var(--gold); color: #e0bd52; }
+body.dash-body .tag--frei { border-color: #7fb069; color: #9fce8a; }
+body.dash-body .tag--bezahlt { border-color: rgba(255,255,255,0.16); color: rgba(242,239,233,0.65); }
+
+/* Detailansicht dunkel */
+body.dash-body .calc {
+  background: linear-gradient(165deg, #1e1c19 0%, #191715 100%);
+  border-color: rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+body.dash-body .summary__row { border-bottom-color: rgba(255,255,255,0.07); }
+body.dash-body .summary__row dt { color: #e0bd52; }
+body.dash-body .calc__line { border-top-color: rgba(255,255,255,0.07); }
+
+/* .notice ist für helle Seiten gebaut (dunkle Schrift) — auf dem dunklen
+   Cockpit-Hintergrund war der Text bisher praktisch unsichtbar (schwarz auf
+   schwarz). Betrifft Paket-Info, Paket-Empfehlung, Ladefehler und Chat-Karte. */
+body.dash-body .notice { background: rgba(255,255,255,0.04); border-left-color: var(--gold); }
+body.dash-body .notice h4 { color: #f2efe9; }
+body.dash-body .notice p { color: rgba(242,239,233,0.75); }
+body.dash-body .notice--fehler { background: rgba(178,58,58,0.12); border-left-color: #d8695f; }
+body.dash-body .notice--fehler h4 { color: #e28b83; }
+body.dash-body .f label { color: rgba(242,239,233,0.7); }
+body.dash-body .btn--line { border-color: rgba(255,255,255,0.25); color: #f2efe9; background-image: linear-gradient(#f2efe9, #f2efe9); }
+body.dash-body .btn--line:hover { color: #121110; }
+body.dash-body .btn--ghost { color: rgba(242,239,233,0.5); }
+body.dash-body .btn--ghost:hover { color: #f2efe9; }
+body.dash-body .muted-note, body.dash-body .f__hint { color: rgba(242,239,233,0.42); }
+
+body.dash-body .admin__list tr { background: linear-gradient(165deg, #1e1c19 0%, #191715 100%); border-color: rgba(255,255,255,0.08); }
+body.dash-body .admin__list td::before { color: rgba(242, 239, 233, 0.5); }
+
+@media (max-width: 1100px) {
+  .dash__kpis { grid-template-columns: repeat(2, 1fr); }
+  .dash__haupt { grid-template-columns: 1fr 1fr; }
+  .dash__haupt .feature { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+  .dash__kpis, .dash__haupt { grid-template-columns: 1fr; }
+  .umsatz__monat:nth-child(odd) .umsatz__label { visibility: hidden; }
+}

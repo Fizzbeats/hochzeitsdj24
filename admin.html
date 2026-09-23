@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<noscript><style>.reveal,.split__inhalt,.split__frage,.hero__strich{opacity:1!important;transform:none!important;max-height:none!important}</style></noscript>
+<title>DJ-Cockpit — HochzeitsDJ24</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="stylesheet" href="fonts.css?v=20260801b3">
+
+<link rel="stylesheet" href="style.css?v=20260801b3">
+<link rel="stylesheet" href="app.css?v=20260801b3">
+<link rel="stylesheet" href="dash.css?v=20260801b3">
+<link rel="stylesheet" href="fuehrung.css?v=20260801b3">
+</head>
+<body class="dash-body">
+
+<div id="site-header"></div>
+
+<!-- ---------- Ladeschirm ----------
+     Zeigt sich immer zuerst, statt kurz die Anmeldemaske aufblitzen zu
+     lassen, während geprüft wird, ob man schon angemeldet ist. -->
+<div class="ladeschirm" id="ladeSchirm">
+  <p class="ladeschirm__marke">Hochzeits<span>DJ</span>24</p>
+  <p class="ladeschirm__text" id="ladeText">Wird geladen …</p>
+</div>
+
+<main>
+
+<!-- ---------- Anmeldung ---------- -->
+<section class="auth" id="auth" style="display:none">
+  <div class="shell" style="display:grid;place-items:center">
+    <div class="auth__card">
+      <p class="kicker">DJ-Bereich</p>
+      <h2>Willkommen zurück</h2>
+      <p>Dein Cockpit für Anfragen, Termine und Zahlen.</p>
+
+      <form id="loginForm" autocomplete="on">
+        <div class="f"><label for="loginMail">E-Mail</label><input type="email" id="loginMail" name="email" autocomplete="username email"></div>
+        <div class="f"><label for="loginPw">Passwort</label><input type="password" id="loginPw" name="password" autocomplete="current-password"></div>
+
+        <button type="submit" class="btn btn--gold btn--full" id="loginBtn">Anmelden</button>
+        <p class="auth__error" id="loginError"></p>
+      </form>
+      <p class="f__hint" id="demoHint" style="margin-top:20px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- Dashboard ---------- -->
+<section class="dash" id="panel" style="display:none">
+  <div class="dash__shell">
+
+    <div class="dash__kopf">
+      <div>
+        <h1 class="dash__gruss" id="gruss">Hallo Jens</h1>
+        <p class="dash__datum" id="heute"></p>
+      </div>
+      <div class="dash__aktionen">
+        <button class="btn btn--ghost" id="tourStart">Tour ansehen</button>
+        <button class="btn btn--line" id="reload">Aktualisieren</button>
+      </div>
+    </div>
+
+    <div class="notice notice--fehler" id="ladeFehler" style="display:none">
+      <h4>Anfragen konnten nicht geladen werden</h4>
+      <p id="ladeFehlerText">Bitte prüfe deine Internetverbindung.</p>
+      <button class="btn btn--line" id="ladeFehlerRetry" style="margin-top:16px">Nochmal versuchen</button>
+    </div>
+
+    <div id="dashboard">
+
+      <!-- Kennzahlen -->
+      <div class="dash__kpis">
+        <div class="karte">
+          <p class="karte__titel"><span class="karte__eq" aria-hidden="true"><i></i><i></i><i></i></span>Einnahmen dieses Jahr</p>
+          <p class="kpi__wert" id="kpiUmsatz">—</p>
+          <p class="kpi__zusatz" id="kpiUmsatzZusatz"></p>
+        </div>
+        <div class="karte">
+          <p class="karte__titel">Offene Rechnungen</p>
+          <p class="kpi__wert" id="kpiOffen">—</p>
+          <p class="kpi__zusatz" id="kpiOffenZusatz"></p>
+        </div>
+        <div class="karte">
+          <p class="karte__titel">Anstehende Termine</p>
+          <p class="kpi__wert" id="kpiTermine">—</p>
+          <p class="kpi__zusatz" id="kpiTermineZusatz"></p>
+        </div>
+        <div class="karte">
+          <p class="karte__titel">Neue Anfragen</p>
+          <p class="kpi__wert" id="kpiNeu">—</p>
+          <p class="kpi__zusatz" id="kpiNeuZusatz"></p>
+        </div>
+      </div>
+
+      <!-- Hauptbereich -->
+      <div class="dash__haupt">
+
+        <div class="karte feature karte--klick" id="featureKarte">
+          <p class="karte__titel">Dringendster Vorgang</p>
+          <div id="featureInhalt"><p class="dliste--leer">Noch keine Anfragen.</p></div>
+        </div>
+
+        <div class="karte">
+          <p class="karte__titel">Nächste Veranstaltungen</p>
+          <ul class="dliste" id="termineListe"></ul>
+        </div>
+
+        <div class="karte">
+          <p class="karte__titel">Offene Rechnungen</p>
+          <ul class="dliste" id="rechnungenListe"></ul>
+        </div>
+
+      </div>
+
+      <!-- Umsatzverlauf -->
+      <div class="karte">
+        <p class="karte__titel">Umsatzverlauf <span id="umsatzJahr"></span></p>
+        <p class="umsatz__summe" id="umsatzSumme">0 €<small>freigegebene Verträge, inkl. MwSt.</small></p>
+        <div class="umsatz" id="umsatzBalken"></div>
+      </div>
+
+      <!-- Alle Anfragen -->
+      <div class="karte dash__tabelle" id="listenBereich">
+        <p class="karte__titel">Alle Anfragen</p>
+        <table class="admin__list">
+          <thead>
+            <tr><th>Eingang</th><th>Kunde</th><th>Anlass</th><th>Termin</th><th>Betrag</th><th>Status</th></tr>
+          </thead>
+          <tbody id="liste"></tbody>
+        </table>
+        <p class="muted-note" id="leer" style="display:none">Noch keine Anfragen vorhanden.</p>
+      </div>
+
+    </div>
+
+    <!-- ---------- Detailansicht ---------- -->
+    <div class="detail" id="detail">
+      <button class="btn btn--ghost" id="zurueckListe" style="margin-bottom:32px">← Zurück zum Cockpit</button>
+
+      <div class="detail__grid">
+
+        <div>
+          <p class="kicker">Angaben des Kunden</p>
+          <h2 id="detailTitel" style="margin-bottom:2rem"></h2>
+          <dl class="summary" id="detailSummary"></dl>
+
+          <h3 style="margin:48px 0 20px">Musik und Wünsche</h3>
+          <dl class="summary" id="detailMusik"></dl>
+        </div>
+
+        <div class="calc">
+          <h3>Kalkulation</h3>
+
+          <div class="notice" id="paketInfo" style="display:none;margin-bottom:20px">
+            <h4 id="paketInfoName">Paket</h4>
+            <p style="font-size:0.9rem">
+              Der Kunde hat ein Paket zum Pauschalpreis gebucht — die Stundensätze
+              greifen hier nicht, nur Extras kommen obendrauf.
+            </p>
+          </div>
+
+          <!-- Automatische Empfehlung, wenn der Kunde ohne Paket angefragt hat -->
+          <div class="notice" id="empfehlungHinweis" style="display:none;margin-bottom:20px">
+            <h4>Automatische Paket-Empfehlung</h4>
+            <p id="empfehlungHinweisText" style="font-size:0.9rem"></p>
+            <button type="button" class="btn btn--line" id="empfehlungUebernehmenAdmin" style="margin-top:14px"></button>
+          </div>
+          <div class="f" id="paketPreisFeld" style="display:none">
+            <label for="pPaket">Paket-Pauschalpreis (€)</label>
+            <input type="number" id="pPaket" step="0.01">
+          </div>
+
+          <div class="grid-2">
+            <div class="f"><label for="satzEmpfang">Satz Empfang (€/h)</label><input type="number" id="satzEmpfang" step="0.01"></div>
+            <div class="f"><label for="satzParty">Satz Party (€/h)</label><input type="number" id="satzParty" step="0.01"></div>
+          </div>
+          <div class="grid-2">
+            <div class="f"><label for="pTechnik" id="pTechnikLabel">Technik (€)</label><input type="number" id="pTechnik" step="0.01"></div>
+            <div class="f"><label for="pEntertainment">Programm (€)</label><input type="number" id="pEntertainment" step="0.01"></div>
+          </div>
+          <div class="grid-2">
+            <div class="f"><label for="pOpenEnd">Open End ab 1 Uhr (€)</label><input type="number" id="pOpenEnd" step="0.01"></div>
+            <div class="f"><label for="pKinderanimation">Kinderanimation (€)</label><input type="number" id="pKinderanimation" step="0.01"></div>
+          </div>
+          <div class="grid-2">
+            <div class="f"><label for="pFotobox" id="pFotoboxLabel">Fotobox (€)</label><input type="number" id="pFotobox" step="0.01"></div>
+            <div class="f"><label for="pRemix">Hochzeitstanz, inkl. 2 Korrekturen (€)</label><input type="number" id="pRemix" step="0.01"></div>
+          </div>
+          <div class="grid-2">
+            <div class="f"><label for="pRemixKorrektur">Preis je weitere Korrektur (€)</label><input type="number" id="pRemixKorrektur" step="0.01"></div>
+            <div class="f"><label for="remixKorrekturenExtra">Korrekturen über 2 hinaus</label><input type="number" id="remixKorrekturenExtra" step="1" min="0" value="0"></div>
+          </div>
+          <div class="f"><label for="rabatt">Rabatt (%)</label><input type="number" id="rabatt" step="1" min="0" max="100" value="0"></div>
+
+          <div id="rechnung" style="margin-top:28px"></div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:32px">
+            <button class="btn btn--line" id="vorschau">PDF-Vorschau öffnen</button>
+            <button class="btn btn--gold" id="freigeben">Für Kunden freigeben</button>
+            <button class="btn btn--line" id="bezahlt" style="display:none">Als bezahlt markieren</button>
+            <button class="btn btn--ghost" id="loeschen" style="color:#c96a5a">Anfrage löschen</button>
+          </div>
+          <p class="f__hint" id="detailStatus" style="margin-top:16px"></p>
+
+          <div class="notice" id="chatKarte" style="margin-top:24px">
+            <h4>Chat mit dem Kunden</h4>
+            <div class="chat" id="chatVerlauf"></div>
+            <div class="chat__eingabe">
+              <textarea id="chatText" rows="2" placeholder="Antwort an den Kunden …"></textarea>
+              <button class="btn btn--line" id="chatSendenBtn">Senden</button>
+            </div>
+            <p class="f__hint" id="chatStatus" style="margin-top:10px"></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=20260801b3"></script>
+<script src="pdf.js?v=20260801b3"></script>
+<script src="daten.js?v=20260801b3"></script>
+<script src="nav.js?v=20260801b3"></script>
+<script src="admin-fuehrung.js?v=20260801b3"></script>
+<script src="admin.js?v=20260801b3"></script>
+</body>
+</html>

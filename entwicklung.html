@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<noscript><style>.reveal,.split__inhalt,.split__frage,.hero__strich{opacity:1!important;transform:none!important;max-height:none!important}</style></noscript>
+<title>Entwicklung — HochzeitsDJ24</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="stylesheet" href="fonts.css?v=20260801b3">
+
+<link rel="stylesheet" href="style.css?v=20260801b3">
+<link rel="stylesheet" href="app.css?v=20260801b3">
+<style>
+  /* ---------- Sprungnavigation ---------- */
+  nav.jump {
+    position: sticky; top: 53px; z-index: 20; margin-top: 53px;
+    background: rgba(247, 244, 239, 0.88);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.jump .jump__inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 3vw, 44px);
+    display: flex; align-items: center; gap: 4px; height: 56px; overflow-x: auto;
+  }
+  nav.jump .brand {
+    font-family: var(--font-display); font-size: 1rem; color: var(--ink);
+    margin-right: 18px; white-space: nowrap; flex-shrink: 0;
+  }
+  nav.jump a {
+    flex-shrink: 0; padding: 8px 13px; border-radius: 999px;
+    font-size: 0.83rem; font-weight: 500; color: var(--grey);
+    text-decoration: none; white-space: nowrap; transition: background 0.2s, color 0.2s;
+  }
+  nav.jump a:hover { background: var(--gold-tint); color: var(--gold-deep); }
+
+  .entw { padding: 56px 0 90px; }
+  .entw__shell { max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 3vw, 44px); }
+  section.bloc { padding: 48px 0; border-bottom: 1px solid var(--line); }
+  section.bloc:last-of-type { border-bottom: 0; }
+  .bloc__kopf { margin-bottom: 28px; }
+  .bloc__kopf h2 { font-size: clamp(1.5rem, 2.6vw, 1.9rem); margin: 0 0 8px; }
+  .bloc__kopf p { color: var(--grey); margin: 0; max-width: 60ch; font-size: 0.96rem; }
+
+  .status-zeile { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .status-pille {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  }
+  .status-pille::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-pille.gut { background: rgba(74,124,89,0.1); color: #4a7c59; }
+  .status-pille.gut::before { background: #4a7c59; }
+  .status-pille.offen { background: rgba(176,106,46,0.1); color: #b06a2e; }
+  .status-pille.offen::before { background: #b06a2e; }
+
+  /* ---------- Farb-Muster ---------- */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .swatch { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--white); box-shadow: var(--weich); }
+  .swatch__chip { height: 56px; }
+  .swatch__meta { padding: 11px 14px 13px; }
+  .swatch__name { font-weight: 600; font-size: 0.9rem; margin: 0 0 2px; }
+  .swatch__hex { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.76rem; color: var(--grey); margin: 0 0 5px; }
+  .swatch__use { font-size: 0.8rem; color: var(--ink-80); margin: 0; }
+
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .type-grid { grid-template-columns: 1fr; } }
+  .type-card { border: 1px solid var(--line); border-radius: 12px; padding: 24px 24px 20px; background: var(--white); box-shadow: var(--weich); }
+  .type-card .sample { font-size: 1.9rem; margin: 6px 0 10px; }
+  .type-card .label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-deep); }
+  .type-card .note { font-size: 0.84rem; color: var(--grey); margin: 0; }
+
+  /* ---------- Seitenkarte ---------- */
+  .pages { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .page-card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px;
+    background: var(--white); box-shadow: var(--weich); transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .page-card:hover { transform: translateY(-2px); box-shadow: var(--weich-tief); }
+  .page-card__file { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.85rem; font-weight: 600; color: var(--ink); margin: 0 0 5px; }
+  .page-card p.desc { font-size: 0.83rem; color: var(--grey); margin: 0; }
+
+  /* ---------- Funktionsgruppen ---------- */
+  .feature-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+  .feature-group { border-left: 3px solid var(--gold); padding-left: 18px; }
+  .feature-group h3 { font-size: 0.98rem; margin: 0 0 10px; font-family: var(--font-text); font-weight: 600; }
+  .feature-group ul { margin: 0; padding-left: 18px; font-size: 0.87rem; color: var(--ink-80); }
+  .feature-group li { margin-bottom: 6px; }
+
+  /* ---------- Stand ---------- */
+  .todo-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 640px) { .todo-cols { grid-template-columns: 1fr; } }
+  .todo-col h3 { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 12px; }
+  .todo-col.done h3 { color: #4a7c59; }
+  .todo-col.open h3 { color: #b06a2e; }
+  .todo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+  .todo-list li {
+    display: flex; gap: 9px; align-items: flex-start; font-size: 0.9rem;
+    padding: 11px 13px; border-radius: 9px; background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .todo-list li::before { flex-shrink: 0; margin-top: 3px; font-size: 0.78rem; }
+  .todo-col.done .todo-list li::before { content: "✓"; color: #4a7c59; font-weight: 700; }
+  .todo-col.open .todo-list li::before { content: "○"; color: #b06a2e; }
+
+  /* ---------- Automatische Vorschläge ---------- */
+  #vorschlagListe li::before { content: "💡"; font-size: 0.9rem; }
+  #vorschlagListe li.wichtig { border-color: rgba(178,58,58,0.4); }
+  #vorschlagListe li.wichtig::before { content: "⚠️"; }
+  #vorschlagListe code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.8em; background: var(--gold-tint); padding: 1px 5px; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="jump" aria-label="Sprungnavigation">
+  <div class="jump__inner">
+    <span class="brand">Entwicklung</span>
+    <a href="#design">Design-System</a>
+    <a href="#seiten">Seitenkarte</a>
+    <a href="#funktionen">Funktionen</a>
+    <a href="#stand">Stand</a>
+    <a href="#vorschlaege">Vorschläge</a>
+  </div>
+</nav>
+
+<div id="site-header"></div>
+
+<main>
+<section class="entw">
+  <div class="entw__shell">
+
+    <p class="kicker">Entwicklung</p>
+    <h1 style="max-width:20ch;margin-bottom:1rem">Dein Bereich als Entwickler</h1>
+    <p style="color:var(--grey);max-width:60ch;font-size:1.05rem;margin:0">
+      Nicht das Geschäfts-Cockpit deines Vaters — eine eigene Seite nur für dich: Design-System,
+      Seitenkarte und Funktionsstand zum schnellen Wiedereinsteigen.
+    </p>
+    <div class="status-zeile" id="statusZeile">
+      <span class="status-pille offen">Live-Checks laufen …</span>
+    </div>
+
+    <section class="bloc" id="design" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>Design-System</h2>
+        <p>Die tatsächlichen Farb- und Schriftwerte aus dem Seiten-Code.</p>
+      </div>
+
+      <div class="swatches" style="margin-bottom:24px">
+        <div class="swatch"><div class="swatch__chip" style="background:#0e0d0c"></div>
+          <div class="swatch__meta"><p class="swatch__name">Ink</p><p class="swatch__hex">#0e0d0c</p><p class="swatch__use">Haupttext, dunkle Flächen, Cockpit-Hintergrund</p></div></div>
+        <div class="swatch"><div class="swatch__chip" style="background:#f7f4ef"></div>
+          <div class="swatch__meta"><p class="swatch__name">Cream</p><p class="swatch__hex">#f7f4ef</p><p class="swatch__use">Seitenhintergrund auf hellen Unterseiten</p></div></div>
+        <div class="swatch"><div class="swatch__chip" style="background:#6a6358"></div>
+          <div class="swatch__meta"><p class="swatch__name">Grey</p><p class="swatch__hex">#6a6358</p><p class="swatch__use">Fließtext-Nebenfarbe, Feldbeschriftungen</p></div></div>
+        <div class="swatch"><div class="swatch__chip" style="background:#b4901f"></div>
+          <div class="swatch__meta"><p class="swatch__name">Gold</p><p class="swatch__hex">#b4901f</p><p class="swatch__use">Akzentfarbe: Buttons, aktive Zustände, Rahmen</p></div></div>
+        <div class="swatch"><div class="swatch__chip" style="background:#e0bd52"></div>
+          <div class="swatch__meta"><p class="swatch__name">Gold, hell</p><p class="swatch__hex">#e0bd52</p><p class="swatch__use">Gold-Variante auf dunklem Grund (Cockpit)</p></div></div>
+        <div class="swatch"><div class="swatch__chip" style="background:#121110"></div>
+          <div class="swatch__meta"><p class="swatch__name">Cockpit-Grund</p><p class="swatch__hex">#121110</p><p class="swatch__use">Hintergrund des DJ-Cockpits</p></div></div>
+      </div>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <p class="label">Display · Libre Caslon Display</p>
+          <p class="sample" style="font-family:var(--font-display)">Musik, die Ihren Tag trägt</p>
+          <p class="note">Überschriften, große Zahlen, Zitate.</p>
+        </div>
+        <div class="type-card">
+          <p class="label">Text · Poppins</p>
+          <p class="sample" style="font-family:var(--font-text);font-weight:500">Ihre Angaben, Ihr Angebot.</p>
+          <p class="note">Fließtext, Buttons, Formulare, Labels. Gewichte 300–600.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloc" id="seiten" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>Seitenkarte</h2>
+        <p>Sieben Seiten, ein gemeinsamer Kopf und eine gemeinsame Anmeldung (nav.js, daten.js). Klick einfach drauf.</p>
+      </div>
+      <div class="pages">
+        <a class="page-card" href="index.html"><p class="page-card__file">index.html</p><p class="desc">Startseite, öffentlich</p></a>
+        <a class="page-card" href="angebot.html"><p class="page-card__file">angebot.html</p><p class="desc">Angebotserstellung, öffentlich</p></a>
+        <a class="page-card" href="kundenbereich.html"><p class="page-card__file">kundenbereich.html</p><p class="desc">Kundenbereich, nach Anmeldung</p></a>
+        <a class="page-card" href="admin.html"><p class="page-card__file">admin.html</p><p class="desc">DJ-Cockpit, nur Verwalter</p></a>
+        <a class="page-card" href="profil.html"><p class="page-card__file">profil.html</p><p class="desc">Profilbild &amp; Anzeigename</p></a>
+        <a class="page-card" href="impressum.html"><p class="page-card__file">impressum.html</p><p class="desc">Rechtliches, Entwurf</p></a>
+        <a class="page-card" href="datenschutz.html"><p class="page-card__file">datenschutz.html</p><p class="desc">Rechtliches, Entwurf</p></a>
+      </div>
+    </section>
+
+    <section class="bloc" id="funktionen" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>Funktionen im Überblick</h2>
+        <p>Was seitenübergreifend zusammenhängt.</p>
+      </div>
+      <div class="feature-groups">
+        <div class="feature-group">
+          <h3>Zugang &amp; Sicherheit</h3>
+          <ul>
+            <li>Eine Anmeldung für Kunden, DJ und Entwickler, automatische Weiterleitung je nach Rolle</li>
+            <li>Rechteprüfung läuft in der Datenbank, nicht im Browser-Code</li>
+            <li>Bleibt angemeldet über Neustarts hinweg</li>
+          </ul>
+        </div>
+        <div class="feature-group">
+          <h3>Kundenreise</h3>
+          <ul>
+            <li>Anlass-abhängiger Fragebogen</li>
+            <li>Automatische Preisberechnung aus Zeiten und Leistungen</li>
+            <li>Vertrags-PDF nach Vorlage</li>
+            <li>Verbindliche Zusage oder Rückfrage</li>
+          </ul>
+        </div>
+        <div class="feature-group">
+          <h3>DJ-Cockpit</h3>
+          <ul>
+            <li>Kennzahlen, Umsatzverlauf, offene Rechnungen</li>
+            <li>Dringendster statt einfach neuester Vorgang</li>
+            <li>Einnahmen zählen erst nach Kundenzusage</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloc" id="stand" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>Aktueller Stand <span style="font-size:0.7em;color:var(--grey)" id="standZeit"></span></h2>
+        <p>Wird bei jedem Aufruf live geprüft — direkt gegen Datenbank und Dateien, wie im DJ-Cockpit.</p>
+      </div>
+      <div class="todo-cols">
+        <div class="todo-col done">
+          <h3>Erledigt</h3>
+          <ul class="todo-list" id="standErledigt">
+            <li>Wird geprüft …</li>
+          </ul>
+        </div>
+        <div class="todo-col open">
+          <h3>Noch offen</h3>
+          <ul class="todo-list" id="standOffen">
+            <li>Wird geprüft …</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloc" id="vorschlaege" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>Automatische Vorschläge</h2>
+        <p>
+          Von der Seite selbst erzeugt — nicht von Kunde oder DJ. Die Checks schauen auf
+          Datenbank, Dateien und Konfiguration und schlagen vor, was sich verbessern lässt.
+        </p>
+      </div>
+      <ul class="todo-list" id="vorschlagListe">
+        <li>Wird geprüft …</li>
+      </ul>
+    </section>
+
+  </div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=20260801b3"></script>
+<script src="daten.js?v=20260801b3"></script>
+<script src="nav.js?v=20260801b3"></script>
+<script src="entwicklung.js?v=20260801b3"></script>
+</body>
+</html>

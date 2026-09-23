@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<noscript><style>.reveal,.split__inhalt,.split__frage,.hero__strich{opacity:1!important;transform:none!important;max-height:none!important}</style></noscript>
+<title>Profil — HochzeitsDJ24</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="stylesheet" href="fonts.css?v=20260801b3">
+
+<link rel="stylesheet" href="style.css?v=20260801b3">
+<link rel="stylesheet" href="app.css?v=20260801b3">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+<section class="page-head">
+  <div class="shell">
+    <p class="kicker">Profil</p>
+    <h1>Ihre Einstellungen</h1>
+  </div>
+</section>
+
+<section class="wizard">
+  <div class="shell" style="max-width:560px">
+    <div style="background:var(--flaeche);border:1px solid var(--line);border-radius:var(--rund);box-shadow:var(--weich);padding:clamp(32px,5vw,48px)">
+
+      <div class="profil__bildzeile">
+        <div class="profil__avatar" id="avatarVorschau"></div>
+        <div class="profil__bildAktionen">
+          <input type="file" id="bildInput" accept="image/*" hidden>
+          <button type="button" class="btn btn--line" id="bildWaehlen">Bild auswählen</button>
+          <button type="button" class="btn btn--ghost" id="bildEntfernen">Entfernen</button>
+        </div>
+      </div>
+      <p class="f__hint" id="bildStatus"></p>
+
+      <div class="f" style="margin-top:36px">
+        <label for="anzeigename">Anzeigename</label>
+        <input type="text" id="anzeigename" placeholder="Wie sollen wir Sie ansprechen?">
+      </div>
+      <div class="f">
+        <label for="emailAnzeige">E-Mail</label>
+        <input type="text" id="emailAnzeige" disabled>
+      </div>
+
+      <button class="btn btn--gold" id="speichern">Speichern</button>
+      <p class="f__hint" id="status" style="margin-top:14px"></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=20260801b3"></script>
+<script src="daten.js?v=20260801b3"></script>
+<script src="nav.js?v=20260801b3"></script>
+<script src="profil.js?v=20260801b3"></script>
+</body>
+</html>

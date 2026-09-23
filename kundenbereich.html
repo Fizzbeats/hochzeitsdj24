@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<noscript><style>.reveal,.split__inhalt,.split__frage,.hero__strich{opacity:1!important;transform:none!important;max-height:none!important}</style></noscript>
+<title>Ihr Angebot — HochzeitsDJ24</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="stylesheet" href="fonts.css?v=20260801b3">
+
+<link rel="stylesheet" href="style.css?v=20260801b3">
+<link rel="stylesheet" href="app.css?v=20260801b3">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+
+<!-- ---------- Anmeldung / Registrierung ---------- -->
+<section class="auth" id="auth">
+  <div class="shell" style="display:grid;place-items:center">
+    <div class="auth__card">
+      <p class="kicker">Kundenbereich</p>
+
+      <div class="tabs">
+        <button class="tab is-active" data-tab="login">Anmelden</button>
+        <button class="tab" data-tab="register">Konto anlegen</button>
+      </div>
+
+      <!-- Anmelden -->
+      <div class="tabpane is-active" id="pane-login">
+        <h2>Willkommen zurück</h2>
+        <p>Melden Sie sich an, um den Stand Ihrer Anfrage und Ihr Angebot zu sehen.</p>
+
+        <form id="loginForm" autocomplete="on">
+          <div class="f"><label for="loginMail">E-Mail</label><input type="email" id="loginMail" name="email" autocomplete="username email"></div>
+          <div class="f"><label for="loginPw">Passwort</label><input type="password" id="loginPw" name="password" autocomplete="current-password"></div>
+
+          <button type="submit" class="btn btn--gold btn--full" id="loginBtn">Anmelden</button>
+          <p class="auth__error" id="loginError"></p>
+          <p class="f__hint" style="margin-top:12px">
+            Ihr Browser kann die Zugangsdaten für Sie merken — praktisch, wenn sich mehrere
+            Personen (z. B. Sie und Ihre Eltern) von ihrem eigenen Gerät aus anmelden.
+          </p>
+        </form>
+      </div>
+
+      <!-- Registrieren -->
+      <div class="tabpane" id="pane-register">
+        <h2>Konto anlegen</h2>
+        <p>So bleiben Ihre Angaben gespeichert und Sie sehen jederzeit, wie weit Ihre Anfrage ist.</p>
+
+        <form id="registerForm" autocomplete="on">
+          <div class="f"><label for="regMail">E-Mail</label><input type="email" id="regMail" name="email" autocomplete="username email"></div>
+          <div class="f"><label for="regPw">Passwort (mind. 8 Zeichen)</label><input type="password" id="regPw" name="new-password" autocomplete="new-password"></div>
+          <div class="f"><label for="regPw2">Passwort wiederholen</label><input type="password" id="regPw2" name="new-password2" autocomplete="new-password"></div>
+
+          <button type="submit" class="btn btn--gold btn--full" id="regBtn">Konto anlegen</button>
+          <p class="auth__error" id="regError"></p>
+          <p class="f__hint" style="margin-top:16px">
+            Mit dem Anlegen des Kontos stimmen Sie der Verarbeitung Ihrer Daten gemäß
+            <a href="datenschutz.html" style="border-bottom:1px solid var(--gold)">Datenschutzerklärung</a> zu.
+          </p>
+        </form>
+      </div>
+
+      <p class="f__hint" style="margin-top:26px;border-top:1px solid var(--line);padding-top:20px">
+        Noch keine Anfrage gestellt? <a href="angebot.html" style="border-bottom:1px solid var(--gold)">Zur Angebotserstellung</a><br>
+        Fragen? 0176 – 77 444 888
+      </p>
+      <p class="f__hint" id="demoHint" style="margin-top:14px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- Ladefehler ---------- -->
+<section class="wizard" id="ladeFehlerBereich" style="display:none">
+  <div class="shell" style="max-width:560px">
+    <div class="notice notice--fehler">
+      <h4>Ihr Angebot konnte nicht geladen werden</h4>
+      <p id="ladeFehlerText">Bitte prüfen Sie Ihre Internetverbindung.</p>
+      <button class="btn btn--line" id="ladeFehlerRetry" style="margin-top:16px">Nochmal versuchen</button>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- Angebotsansicht ---------- -->
+<section class="admin" id="panel" style="display:none">
+  <div class="shell">
+
+    <div class="admin__bar">
+      <div>
+        <p class="kicker">Ihr Angebot</p>
+        <h1 id="titel" style="font-size:clamp(1.8rem,3vw,2.6rem)">Ihre Feier</h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:18px">
+        <span class="tag tag--frei" id="statusTag">Freigegeben</span>
+      </div>
+    </div>
+
+    <!-- ---------- Fortschritt ---------- -->
+    <ol class="kb-steps" id="kbSteps">
+      <li class="kb-steps__item is-done" data-step="angefragt">
+        <span class="kb-steps__punkt">1</span>
+        <span class="kb-steps__text">Angefragt</span>
+      </li>
+      <li class="kb-steps__item" data-step="pruefung">
+        <span class="kb-steps__punkt">2</span>
+        <span class="kb-steps__text">Wird geprüft</span>
+      </li>
+      <li class="kb-steps__item" data-step="freigegeben">
+        <span class="kb-steps__punkt">3</span>
+        <span class="kb-steps__text">Angebot da</span>
+      </li>
+      <li class="kb-steps__item" data-step="angenommen">
+        <span class="kb-steps__punkt">4</span>
+        <span class="kb-steps__text">Angenommen</span>
+      </li>
+    </ol>
+
+    <div id="wartet" style="display:none">
+      <div class="notice notice--wartet">
+        <span class="notice__eq" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h4>Ihr Angebot wird noch geprüft</h4>
+        <p>
+          Ihre Angaben sind bei uns eingegangen. Jens Winter sieht den Entwurf gerade durch.
+          Sobald er freigegeben ist, finden Sie ihn hier zum Herunterladen — Sie bekommen
+          außerdem eine E-Mail. Fragen jetzt schon? Schreiben Sie einfach unten im Chat.
+        </p>
+      </div>
+    </div>
+
+    <!-- ---------- Feedback-Chat mit dem DJ ----------
+         Steht unabhängig vom Freigabe-Status zur Verfügung, damit Rückfragen
+         auch schon während der Prüfung möglich sind. -->
+    <div class="notice" id="chatKarte" style="margin-top:24px">
+      <h4>Ihr Draht zum DJ</h4>
+      <p style="margin-bottom:18px">
+        Fragen zum Preis, Änderungswünsche oder kurzes Feedback — hier lesen Sie und
+        Jens denselben Verlauf.
+      </p>
+      <div class="chat" id="chatVerlauf"></div>
+      <div class="chat__eingabe">
+        <textarea id="chatText" rows="2" placeholder="Ihre Nachricht an Jens …"></textarea>
+        <button class="btn btn--line" id="chatSenden">Senden</button>
+      </div>
+      <p class="f__hint" id="chatStatus" style="margin-top:10px"></p>
+    </div>
+
+    <div id="vertragBereich" style="display:none">
+      <div class="detail__grid">
+        <div>
+          <h3 style="margin-bottom:20px">Ihre Angaben</h3>
+          <dl class="summary" id="summary"></dl>
+        </div>
+
+        <div class="calc">
+          <h3>Angebotsdokument</h3>
+          <p style="font-size:0.88rem;color:var(--grey)">
+            Bitte prüfen Sie das Angebot in Ruhe. Nach Ihrer Annahme drucken Sie es zweifach aus
+            und bringen es unterschrieben zum Termin mit – oder senden es unterschrieben zurück.
+          </p>
+
+          <div id="rechnung" style="margin:28px 0"></div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <button class="btn btn--gold" id="download">Angebot als PDF herunterladen</button>
+            <button class="btn btn--line" id="ansehen">Im Browser ansehen</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice" style="margin-top:56px">
+        <h4>Wir empfehlen ein persönliches Gespräch</h4>
+        <p>
+          Das Angebot entstand aus Ihren Angaben im Fragebogen. Bevor Sie annehmen, empfehlen wir
+          ausdrücklich ein persönliches Gespräch – so stimmen wir Ablauf, Musikwünsche und die technischen
+          Gegebenheiten Ihrer Location gemeinsam ab. Rufen Sie uns gern an: 0176 – 77 444 888.
+        </p>
+      </div>
+
+      <!-- ---------- Zusage / Feedback-Chat ---------- -->
+      <div class="notice" id="annahmeKarte" style="margin-top:24px">
+        <h4>Passt das Angebot für Sie?</h4>
+        <p>
+          Schauen Sie in Ruhe über Preis und Leistungen. Wenn alles passt, bestätigen Sie
+          das hier verbindlich. Sind Sie mit etwas nicht einverstanden, schreiben Sie
+          Jens direkt unten im Chat – er meldet sich persönlich.
+        </p>
+        <button class="btn btn--gold" id="annehmenBtn" style="margin-top:20px">Ja, ich nehme das Angebot an</button>
+        <p class="f__hint" id="annahmeStatus" style="margin-top:14px"></p>
+      </div>
+
+      <div class="notice" id="angenommenKarte" style="margin-top:24px;display:none">
+        <h4>Vielen Dank!</h4>
+        <p id="angenommenText"></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=20260801b3"></script>
+<script src="pdf.js?v=20260801b3"></script>
+<script src="daten.js?v=20260801b3"></script>
+<script src="nav.js?v=20260801b3"></script>
+<script src="kundenbereich.js?v=20260801b3"></script>
+</body>
+</html>

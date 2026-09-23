@@ -1,0 +1,9 @@
+# Lokale Rohdateien (Original-Fotos/Videos) - verarbeitete Versionen liegen in medien/
+Bilder/
+
+# Claude Code lokale Einstellungen
+.claude/
+
+# Betriebssystem-Dateien
+.DS_Store
+Thumbs.db
