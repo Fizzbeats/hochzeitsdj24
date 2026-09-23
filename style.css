@@ -747,10 +747,9 @@ section { position: relative; }
 .gallery__grid > :nth-child(3) { grid-column: span 2; }
 .gallery__grid > :nth-child(4) { grid-column: span 4; }
 .gallery__grid > :nth-child(5) { grid-column: span 2; }
-.gallery__grid > :nth-child(6) { grid-column: span 4; }
+.gallery__grid > :nth-child(6) { grid-column: span 2; }
 .gallery__grid > :nth-child(7) { grid-column: span 2; }
-.gallery__grid > :nth-child(8) { grid-column: span 4; }
-.gallery__grid > :nth-child(9) { grid-column: span 6; }
+.gallery__grid > :nth-child(8) { grid-column: span 6; }
 .ph--banner { aspect-ratio: 21/8; }
 
 /* ---------- Zitat ---------- */
