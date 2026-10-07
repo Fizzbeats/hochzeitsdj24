@@ -105,13 +105,37 @@
   .todo-col.open .todo-list li::before { content: "○"; color: #b06a2e; }
 
   /* ---------- Automatische Vorschläge ---------- */
+  #vorschlagListe li { position: relative; padding-right: 40px; gap: 11px; }
   #vorschlagListe li::before { content: "💡"; font-size: 0.9rem; }
   #vorschlagListe li.wichtig { border-color: rgba(178,58,58,0.4); }
   #vorschlagListe li.wichtig::before { content: "⚠️"; }
+  #vorschlagListe li.notiz::before { content: "📌"; }
+  #vorschlagListe li.notiz { border-color: rgba(180,144,31,0.4); background: var(--gold-tint); }
   #vorschlagListe code {
     font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     font-size: 0.8em; background: var(--gold-tint); padding: 1px 5px; border-radius: 4px;
   }
+  .vorschlag__x {
+    position: absolute; top: 9px; right: 9px;
+    width: 24px; height: 24px; border-radius: 50%; border: 0; background: none;
+    color: var(--grey); font-size: 0.9rem; cursor: pointer; line-height: 1;
+  }
+  .vorschlag__x:hover { background: rgba(0,0,0,0.06); color: var(--ink); }
+
+  .notiz-form { display: flex; gap: 10px; margin-bottom: 18px; }
+  .notiz-form input {
+    flex: 1; padding: 12px 16px; border: 1px solid var(--line); border-radius: 9px;
+    font-family: var(--font-text); font-size: 0.92rem; background: var(--white);
+  }
+  .notiz-form input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+  .vorschlaege__fuss { margin-top: 14px; font-size: 0.82rem; }
+  .vorschlaege__fuss button {
+    background: none; border: 0; color: var(--grey); text-decoration: underline;
+    cursor: pointer; font-size: inherit; padding: 0;
+  }
+  .vorschlaege__fuss button:hover { color: var(--ink); }
+  .live-hinweis { font-size: 0.78rem; color: var(--grey); margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -251,15 +275,26 @@
 
     <section class="bloc" id="vorschlaege" style="scroll-margin-top:120px">
       <div class="bloc__kopf">
-        <h2>Automatische Vorschläge</h2>
+        <h2>Vorschläge &amp; eigene Notizen</h2>
         <p>
-          Von der Seite selbst erzeugt — nicht von Kunde oder DJ. Die Checks schauen auf
-          Datenbank, Dateien und Konfiguration und schlagen vor, was sich verbessern lässt.
+          Automatisch von der Seite erzeugt (💡/⚠️) — schauen auf Datenbank, Dateien und
+          Konfiguration und schlagen vor, was sich verbessern lässt — dazwischen eigene
+          Notizen (📌), die du dir selbst hinzufügst. Jeder Punkt lässt sich mit ✕ wieder
+          entfernen; die Seite prüft sich außerdem von selbst alle 60&nbsp;Sekunden neu nach.
         </p>
       </div>
+
+      <form class="notiz-form" id="notizForm">
+        <input type="text" id="notizEingabe" placeholder="Eigene Notiz hinzufügen — etwas, das du dir merken willst" maxlength="300">
+        <button type="submit" class="btn btn--line">Hinzufügen</button>
+      </form>
+
       <ul class="todo-list" id="vorschlagListe">
         <li>Wird geprüft …</li>
       </ul>
+      <div class="vorschlaege__fuss" id="vorschlaegeFuss" style="display:none">
+        <button type="button" id="wiederEinblenden"></button>
+      </div>
     </section>
 
   </div>

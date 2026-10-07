@@ -13,9 +13,57 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     liveChecks();
+    // Live-Nachprüfung, solange die Seite offen bleibt — wie im DJ-Cockpit,
+    // damit sich z. B. die Anzahl unbearbeiteter Anfragen von selbst aktualisiert.
+    setInterval(liveChecks, 60000);
   });
 
   const $ = id => document.getElementById(id);
+
+  /* ---------- Eigene Notizen & ausgeblendete Vorschläge ----------
+     Nur in diesem Browser gespeichert (localStorage) — reicht für eine
+     persönliche Entwickler-Checkliste, die du selbst von einem Gerät aus
+     pflegst. Ausgeblendete automatische Vorschläge bleiben dauerhaft
+     verborgen (per ID, nicht per Text, da sich Texte mit Live-Werten
+     ändern können), eigene Notizen werden beim Entfernen ganz gelöscht. */
+  const NOTIZEN_KEY = 'hdj24_entw_notizen';
+  const AUSGEBLENDET_KEY = 'hdj24_entw_ausgeblendet';
+
+  const leseJson = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
+  const leseNotizen = () => leseJson(NOTIZEN_KEY, []);
+  const schreibeNotizen = n => localStorage.setItem(NOTIZEN_KEY, JSON.stringify(n));
+  const leseAusgeblendet = () => leseJson(AUSGEBLENDET_KEY, []);
+  const schreibeAusgeblendet = a => localStorage.setItem(AUSGEBLENDET_KEY, JSON.stringify(a));
+
+  $('notizForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const feld = $('notizEingabe');
+    const text = feld.value.trim();
+    if (!text) return;
+    const notizen = leseNotizen();
+    notizen.push({ id: 'notiz-' + Date.now(), text });
+    schreibeNotizen(notizen);
+    feld.value = '';
+    liveChecks();
+  });
+
+  $('vorschlagListe').addEventListener('click', e => {
+    const btn = e.target.closest('.vorschlag__x');
+    if (!btn) return;
+    if (btn.dataset.notiz) {
+      schreibeNotizen(leseNotizen().filter(n => n.id !== btn.dataset.notiz));
+    } else if (btn.dataset.ausblenden) {
+      const ausgeblendet = leseAusgeblendet();
+      if (!ausgeblendet.includes(btn.dataset.ausblenden)) ausgeblendet.push(btn.dataset.ausblenden);
+      schreibeAusgeblendet(ausgeblendet);
+    }
+    liveChecks();
+  });
+
+  $('wiederEinblenden').addEventListener('click', () => {
+    schreibeAusgeblendet([]);
+    liveChecks();
+  });
 
   /* ---------- Hilfen ---------- */
 
@@ -105,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (dbKonfiguriert) {
       offen.push('Anfragen ohne Konto werden von der Datenbank abgelehnt');
       vorschlaege.push({
-        wichtig: true,
+        id: 'anon-anfrage-blockiert', wichtig: true,
         text: 'Kunden ohne Konto können aktuell keine Anfrage absenden — im Supabase-SQL-Editor die Policy <code>"anfrage anlegen"</code> aus schema.sql ausführen. Gemessene Antwort der Datenbank: „' + (anon.grund || '') + '“'
       });
     }
@@ -115,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (dbKonfiguriert) {
       offen.push('Feedback-Chat: Datenbankfunktion fehlt noch');
       vorschlaege.push({
-        wichtig: true,
+        id: 'chat-funktion-fehlt', wichtig: true,
         text: 'Den Chat-Block aus <code>schema.sql</code> (Spalte <code>chat</code> + Funktion <code>chat_senden</code>) im Supabase-SQL-Editor ausführen — sonst läuft der Kunden-Chat nur im Demo-Modus.'
       });
     }
@@ -124,13 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (online) erledigt.push('Seite läuft öffentlich über https');
     else {
       offen.push('Seite veröffentlichen und Domain verbinden (läuft gerade lokal)');
-      vorschlaege.push({ text: 'Cloudflare Pages oder Netlify anbinden (Anleitung in SETUP.md) — erst dann können echte Kunden anfragen.' });
+      vorschlaege.push({ id: 'nicht-veroeffentlicht', text: 'Cloudflare Pages oder Netlify anbinden (Anleitung in SETUP.md) — erst dann können echte Kunden anfragen.' });
     }
 
     /* Bilder */
     if (bildHochzeit && bildEvents) erledigt.push('Startseiten-Bilder vorhanden (bild-hochzeit.jpg, bild-events.jpg)');
     else offen.push('Startseiten-Bilder fehlen: ' + [!bildHochzeit && 'bild-hochzeit.jpg', !bildEvents && 'bild-events.jpg'].filter(Boolean).join(', '));
-    vorschlaege.push({ text: 'Galerie zeigt noch Platzhalterflächen — eigene Aufnahmen von Feiern einsetzen wirkt deutlich überzeugender.' });
+    vorschlaege.push({ id: 'galerie-platzhalter', text: 'Galerie zeigt noch Platzhalterflächen — eigene Aufnahmen von Feiern einsetzen wirkt deutlich überzeugender.' });
 
     /* Anfragen-Lage (Entwickler ist auch Verwalter und darf alles lesen) */
     try {
@@ -139,33 +187,35 @@ document.addEventListener('DOMContentLoaded', () => {
       erledigt.push(`${anfragen.length} Anfrage${anfragen.length === 1 ? '' : 'n'} in der Datenbank, davon ${neue.length} unbearbeitet`);
       const alt = neue.filter(a => (Date.now() - new Date(a.erstellt || a.created_at)) > 3 * 86400000);
       if (alt.length) vorschlaege.push({
-        wichtig: true,
+        id: 'alte-anfragen', wichtig: true,
         text: `${alt.length} neue Anfrage${alt.length === 1 ? ' wartet' : 'n warten'} seit über 3 Tagen auf Prüfung — die Startseite verspricht eine Antwort binnen zwei Tagen.`
       });
     } catch { /* ohne Rechte einfach überspringen */ }
 
     /* Statische, aus der Konfiguration abgeleitete Vorschläge */
     if (document.querySelector('link[href*="fonts.googleapis"]')) {
-      vorschlaege.push({ text: 'Schriften werden von Google geladen (IP-Übertragung) — für den Echtbetrieb lokal einbinden, das steht auch so in der Datenschutzerklärung.' });
+      vorschlaege.push({ id: 'google-fonts', text: 'Schriften werden von Google geladen (IP-Übertragung) — für den Echtbetrieb lokal einbinden, das steht auch so in der Datenschutzerklärung.' });
     }
     if (!document.querySelector('link[rel*="icon"]')) {
-      vorschlaege.push({ text: 'Es gibt noch kein Favicon — ein kleines „HDJ24“-Zeichen macht die Seite im Browser-Tab wiedererkennbar.' });
+      vorschlaege.push({ id: 'kein-favicon', text: 'Es gibt noch kein Favicon — ein kleines „HDJ24“-Zeichen macht die Seite im Browser-Tab wiedererkennbar.' });
     }
-    vorschlaege.push({ text: 'E-Mail-Benachrichtigung bei neuen Anfragen einrichten (resend.com + Supabase Edge Function, siehe SETUP.md) — sonst muss Jens täglich ins Cockpit schauen.' });
-    vorschlaege.push({ text: 'PDF-Kopf nutzt einen nachgebauten Rahmen — das echte Winter-Entertainment-Logo als Bilddatei einbinden.' });
+    vorschlaege.push({ id: 'email-benachrichtigung', text: 'E-Mail-Benachrichtigung bei neuen Anfragen einrichten (resend.com + Supabase Edge Function, siehe SETUP.md) — sonst muss Jens täglich ins Cockpit schauen.' });
+    vorschlaege.push({ id: 'pdf-logo', text: 'PDF-Kopf nutzt einen nachgebauten Rahmen — das echte Winter-Entertainment-Logo als Bilddatei einbinden.' });
 
     /* Recherche bei vergleichbaren DJ-Websites (dj-acki.de, djsvenwiggermann.de u.a.):
        diese Fragen tauchen dort typischerweise auf, fehlen aber bei uns. Bewusst nicht
        selbst beantwortet in der FAQ — Anzahlung/Storno sind Vertragsbedingungen, die nur
        Jens festlegen kann, nicht die Website eigenständig erfinden darf. */
     vorschlaege.push({
+      id: 'faq-anzahlung-storno',
       text: 'FAQ-Lücke im Vergleich zu anderen DJ-Websites: Es fehlt eine Antwort auf „Ist eine Anzahlung nötig?“ und „Was, wenn ich stornieren muss?“ — beides wird bei Kunden häufig nachgefragt. Da das echte Vertragsbedingungen sind, sollte Jens die Antwort vorgeben, bevor sie in die FAQ kommt.'
     });
     vorschlaege.push({
+      id: 'faq-vorlauf',
       text: 'FAQ könnte noch „Wie früh sollte ich buchen?“ ergänzen — bei mehreren vergleichbaren Hochzeits-DJ-Websites wird zur Hochsaison ein Vorlauf von 1–1,5 Jahren empfohlen. Nur als Orientierung, die tatsächliche Antwort sollte von Jens kommen.'
     });
     vorschlaege.push({
-      wichtig: true,
+      id: 'gema-anmeldung', wichtig: true,
       text: 'Thema GEMA-Anmeldung fehlt komplett auf der Seite — bei praktisch allen vergleichbaren DJ-Websites (djcrosscut.de u.a.) wird das in der FAQ beantwortet, da es bei Musik auf Veranstaltungen in Deutschland fast immer relevant ist. Sollte geklärt werden, wer die Anmeldung übernimmt (DJ, Location oder Kunde), bevor eine Antwort dazu ergänzt wird.'
     });
 
@@ -176,9 +226,29 @@ document.addEventListener('DOMContentLoaded', () => {
     $('standZeit').textContent = '· geprüft ' + new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
     $('standErledigt').innerHTML = erledigt.map(t => `<li>${t}</li>`).join('') || '<li>Noch nichts erledigt</li>';
     $('standOffen').innerHTML = offen.map(t => `<li>${t}</li>`).join('') || '<li>Nichts offen — sauber!</li>';
-    $('vorschlagListe').innerHTML = vorschlaege
-      .sort((a, b) => (b.wichtig ? 1 : 0) - (a.wichtig ? 1 : 0))
-      .map(v => `<li${v.wichtig ? ' class="wichtig"' : ''}>${v.text}</li>`).join('');
+
+    const ausgeblendet = leseAusgeblendet();
+    const sichtbareVorschlaege = vorschlaege.filter(v => !ausgeblendet.includes(v.id));
+    const notizen = leseNotizen().map(n => ({ ...n, notiz: true }));
+    const eintraege = [...sichtbareVorschlaege.sort((a, b) => (b.wichtig ? 1 : 0) - (a.wichtig ? 1 : 0)), ...notizen];
+
+    $('vorschlagListe').innerHTML = eintraege.length
+      ? eintraege.map(v => `
+          <li${v.wichtig ? ' class="wichtig"' : v.notiz ? ' class="notiz"' : ''}>
+            <span>${v.text}</span>
+            <button type="button" class="vorschlag__x" ${v.notiz ? `data-notiz="${v.id}"` : `data-ausblenden="${v.id}"`} aria-label="Entfernen">✕</button>
+          </li>`).join('')
+      : '<li>Keine offenen Vorschläge — alles ausgeblendet oder erledigt.</li>';
+
+    const fuss = $('vorschlaegeFuss'), einblendenBtn = $('wiederEinblenden');
+    if (ausgeblendet.length) {
+      fuss.style.display = '';
+      einblendenBtn.textContent = ausgeblendet.length === 1
+        ? '1 ausgeblendeten Vorschlag wieder einblenden'
+        : `${ausgeblendet.length} ausgeblendete Vorschläge wieder einblenden`;
+    } else {
+      fuss.style.display = 'none';
+    }
 
     /* Status-Pillen oben */
     const pille = (gut, text) => `<span class="status-pille ${gut ? 'gut' : 'offen'}">${text}</span>`;
