@@ -24,12 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
     catch { return false; }
   };
 
-  /** Frischer Supabase-Client OHNE Anmeldesitzung — testet exakt das,
-      was ein anonymer Besucher darf (Anfrage ohne Konto absenden). */
-  const anonClient = () => window.supabase.createClient(
-    CONFIG.supabase.url, CONFIG.supabase.anonKey,
-    { auth: { persistSession: false, autoRefreshToken: false } }
-  );
+  /** Supabase-Client OHNE Anmeldesitzung — testet exakt das, was ein
+      anonymer Besucher darf (Anfrage ohne Konto absenden). Einmal pro
+      Seitenaufruf erzeugt und mit eigenem storageKey: verhindert, dass
+      dieser Testclient mit dem echten Anmelde-Client um dieselbe
+      Sitzung konkurriert (mehrere Supabase-Clients auf einer Seite
+      können sich sonst gegenseitig die Anmeldesitzung invalidieren). */
+  let _anonClient = null;
+  const anonClient = () => {
+    if (!_anonClient) {
+      _anonClient = window.supabase.createClient(
+        CONFIG.supabase.url, CONFIG.supabase.anonKey,
+        { auth: { persistSession: false, autoRefreshToken: false, storageKey: 'hdj24-entwickler-selbsttest' } }
+      );
+    }
+    return _anonClient;
+  };
 
   /** Testet, ob ein Besucher ohne Konto eine Anfrage anlegen darf — genau
       wie DB.speichereAnfrage es für echte Kunden macht: anonym darf nur

@@ -14,7 +14,12 @@ const DB = (() => {
   const sb = () => {
     if (!konfiguriert()) return null;
     if (!client && window.supabase) {
-      client = window.supabase.createClient(CONFIG.supabase.url, CONFIG.supabase.anonKey);
+      // Anmeldesitzung bewusst explizit dauerhaft (nicht nur Standardwerte
+      // verlassen) — Browser-Neustarts und mehrtägige Pausen sollen die
+      // Anmeldung nie verwerfen, solange das Konto nicht aktiv abgemeldet wird.
+      client = window.supabase.createClient(CONFIG.supabase.url, CONFIG.supabase.anonKey, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
     }
     return client;
   };
