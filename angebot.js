@@ -196,22 +196,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // paketId ist nur gesetzt, wenn das Paket echt günstiger ist (siehe
+    // empfehlePaket in pdf.js) — darum hier nur noch dieser eine Fall.
     btn.style.display = '';
-    document.getElementById('empfehlungTitel').textContent =
-      emp.ersparnis > 0 ? `Tipp: Das Paket „${emp.name}“ wäre günstiger`
-      : emp.ersparnis < 0 ? `Tipp: Unser Paket „${emp.name}“ könnte zu Ihnen passen`
-      : `Tipp: Ihre Auswahl passt genau zum Paket „${emp.name}“`;
+    document.getElementById('empfehlungTitel').textContent = `Tipp: Das Paket „${emp.name}“ wäre günstiger`;
     document.getElementById('empfehlungText').textContent =
-      emp.ersparnis > 0
-        ? `Nach Ihrer Auswahl würden Sie einzeln abgerechnet ${pdfHelfer.euro(emp.ohnePaketPreis)} zahlen. ` +
-          `Mit dem Paket „${emp.name}“ zahlen Sie stattdessen ${pdfHelfer.euro(emp.preis)} pauschal — ` +
-          `${pdfHelfer.euro(emp.ersparnis)} gespart. Jens prüft das ohnehin nochmal persönlich.`
-      : emp.ersparnis < 0
-        ? `Für Anlass und Dauer Ihrer Feier gibt es bei uns das Paket „${emp.name}“ zum Festpreis ` +
-          `von ${pdfHelfer.euro(emp.preis)} (Ihre bisherige Auswahl läge einzeln bei ${pdfHelfer.euro(emp.ohnePaketPreis)}). ` +
-          `Dafür ist im Paket mehr enthalten, z. B. Entertainmentprogramm. Muss nicht passen — nur als Idee.`
-        : `Ihre Auswahl entspricht genau unserem Paket „${emp.name}“ (${pdfHelfer.euro(emp.preis)} pauschal) — ` +
-          `derselbe Preis, aber als Festpreis ohne Stundenabrechnung. Jens prüft das ohnehin nochmal persönlich.`;
+      `Nach Ihrer Auswahl würden Sie einzeln abgerechnet ${pdfHelfer.euro(emp.ohnePaketPreis)} zahlen. ` +
+      `Mit dem Paket „${emp.name}“ zahlen Sie stattdessen ${pdfHelfer.euro(emp.preis)} pauschal — ` +
+      `${pdfHelfer.euro(emp.ersparnis)} gespart. Jens prüft das ohnehin nochmal persönlich.`;
     btn.textContent = `Paket „${emp.name}“ übernehmen`;
     btn.onclick = () => {
       const paketDaten = CONFIG.pakete[emp.paketId];

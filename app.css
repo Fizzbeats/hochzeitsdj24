@@ -109,7 +109,7 @@ body { --line: rgba(43, 36, 24, 0.14); }
 .f--invalid input, .f--invalid select { border-color: #b23a3a; }
 
 /* ---------- Auswahlkacheln ---------- */
-.opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 34px; }
+.opts { display: grid; grid-template-columns: repeat(2, 1fr); align-items: start; gap: 16px; margin-bottom: 34px; }
 .opt {
   border: 1px solid var(--line);
   border-radius: var(--rund);

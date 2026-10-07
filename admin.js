@@ -389,10 +389,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       btnAdmin.style.display = '';
 
+      // paketId ist nur gesetzt, wenn das Paket echt günstiger ist (siehe
+      // empfehlePaket in pdf.js) — darum hier nur noch dieser eine Fall.
       $('empfehlungHinweisText').textContent =
-        emp.ersparnis > 0 ? `Passt zum Paket „${emp.name}“ (${emp.preis} € pauschal) — für den Kunden ${emp.ersparnis} € günstiger als Einzelabrechnung (${emp.ohnePaketPreis} €).`
-        : emp.ersparnis < 0 ? `Anlass und Dauer passen zum Paket „${emp.name}“ (${emp.preis} € pauschal) — ${Math.abs(emp.ersparnis)} € mehr als die reine Einzelabrechnung (${emp.ohnePaketPreis} €), dafür z. B. Entertainment inklusive.`
-        : `Passt genau zum Paket „${emp.name}“ (${emp.preis} € pauschal) — gleicher Preis wie einzeln (${emp.ohnePaketPreis} €), aber als Festpreis.`;
+        `Passt zum Paket „${emp.name}“ (${emp.preis} € pauschal) — für den Kunden ${emp.ersparnis} € günstiger als Einzelabrechnung (${emp.ohnePaketPreis} €).`;
       btnAdmin.textContent = `Paket „${emp.name}“ übernehmen`;
       btnAdmin.onclick = async () => {
         const paketDaten = CONFIG.pakete[emp.paketId];

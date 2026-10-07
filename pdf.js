@@ -88,11 +88,14 @@ function empfehlePaket(daten, config) {
     return { paketId: null, name: null, preis: null, ohnePaketPreis: ohnePaket.gesamt, ersparnis: null };
   }
 
-  // Die Pakete sind bewusst preisneutral zu den Einzelpositionen kalkuliert —
-  // ihr Vorteil ist der Festpreis, nicht zwingend ein Rabatt. Sobald Anlass
-  // und Dauer passen, lohnt sich der Hinweis fast immer — auch wenn das
-  // Paket etwas mehr kostet, weil dann zusätzliche Leistungen inklusive sind.
   const ersparnis = Math.round((ohnePaket.gesamt - beste.gesamt) * 100) / 100;
+
+  // Nur empfehlen, wenn das Paket echt günstiger ist als die Einzelabrechnung —
+  // bei gleichem oder höherem Preis wäre der Hinweis irreführend, auch wenn
+  // im Paket mehr enthalten ist.
+  if (ersparnis <= 0) {
+    return { paketId: null, name: null, preis: null, ohnePaketPreis: ohnePaket.gesamt, ersparnis: null };
+  }
 
   return { paketId: beste.id, name: beste.name, preis: beste.preis, gesamtMitPaket: beste.gesamt, ersparnis, ohnePaketPreis: ohnePaket.gesamt };
 }
