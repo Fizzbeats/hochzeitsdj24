@@ -295,3 +295,45 @@ body.dash-body .admin__list td::before { color: rgba(242, 239, 233, 0.5); }
   .dash__kpis, .dash__haupt { grid-template-columns: 1fr; }
   .umsatz__monat:nth-child(odd) .umsatz__label { visibility: hidden; }
 }
+
+/* ---------- Neue-Nachricht-Popup ----------
+   Fest unten rechts, über allem anderen (auch über der Detailansicht),
+   klickbar zum direkten Sprung in den Chat der betroffenen Anfrage. */
+.chat-popup {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 600;
+  width: min(360px, calc(100vw - 48px));
+  background: linear-gradient(165deg, #211e1a 0%, #19100a 100%);
+  border: 1px solid rgba(224, 189, 82, 0.35);
+  border-radius: 16px;
+  padding: 20px 44px 20px 22px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+}
+.chat-popup.ist-da { opacity: 1; transform: none; pointer-events: auto; }
+.chat-popup__label {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); margin: 0 0 6px;
+}
+.chat-popup__name { font-family: var(--font-display); font-size: 1.1rem; color: #f2efe9; margin: 0 0 4px; }
+.chat-popup__text {
+  font-size: 0.9rem; line-height: 1.5; color: rgba(242, 239, 233, 0.75); margin: 0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.chat-popup__schliessen {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: 0; color: rgba(242, 239, 233, 0.5);
+  font-size: 1.2rem; line-height: 1; cursor: pointer; padding: 4px;
+}
+.chat-popup__schliessen:hover { color: #f2efe9; }
+@keyframes chatPopupKlingeln {
+  0%, 100% { transform: none; } 20% { transform: rotate(-4deg); } 40% { transform: rotate(4deg); }
+  60% { transform: rotate(-3deg); } 80% { transform: rotate(3deg); }
+}
+.chat-popup.ist-da { animation: chatPopupKlingeln 0.5s var(--ease) 0.35s; }

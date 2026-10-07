@@ -226,6 +226,17 @@
 
 </main>
 
+<!-- ---------- Neue-Nachricht-Popup ----------
+     Erscheint, sobald ein Kunde im Chat schreibt, egal ob gerade die
+     Liste oder eine andere Anfrage offen ist. Klick darauf öffnet die
+     passende Anfrage direkt im Chat. -->
+<div class="chat-popup" id="chatPopup" role="status" aria-live="polite">
+  <button class="chat-popup__schliessen" id="chatPopupSchliessen" aria-label="Benachrichtigung schließen">×</button>
+  <p class="chat-popup__label">Neue Nachricht</p>
+  <p class="chat-popup__name" id="chatPopupName"></p>
+  <p class="chat-popup__text" id="chatPopupText"></p>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js?v=20260924a"></script>

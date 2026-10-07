@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('auth').style.display = 'none';
     $('panel').style.display = 'block';
     demoDatenAnlegen();
-    laden();
+    pruefeNeueNachrichten(); // lädt die Liste UND legt sofort den Vergleichsstand an
     window.starteCockpitFuehrung?.();
   };
 
@@ -472,6 +472,59 @@ document.addEventListener('DOMContentLoaded', () => {
       : '<p class="chat__leer">Noch keine Nachrichten vom Kunden.</p>';
     $('chatVerlauf').scrollTop = $('chatVerlauf').scrollHeight;
   }
+
+  /* ---------- Neue Kundennachrichten: Popup + Klick zum Chat ----------
+     Es gibt keine Server-Push-Benachrichtigung — darum fragt das Cockpit
+     regelmäßig nach, solange es offen ist, und vergleicht die Anzahl der
+     Kundennachrichten je Anfrage mit dem zuletzt gesehenen Stand. */
+  const kundenNachrichten = a => DB.chatVon(a).filter(n => n.von === 'kunde');
+  let ersteNachrichtenpruefung = true;
+
+  const chatPopup = $('chatPopup');
+  const zeigeChatPopup = (anfrage, nachricht) => {
+    const k = anfrage.daten?.kunde || {};
+    $('chatPopupName').textContent = `${k.vorname || ''} ${k.nachname || ''}`.trim() || 'Ein Kunde';
+    $('chatPopupText').textContent = nachricht.text || '';
+    chatPopup.dataset.anfrageId = anfrage.id;
+    chatPopup.classList.remove('ist-da');
+    void chatPopup.offsetWidth; // Klingel-Animation bei jeder neuen Nachricht neu anstoßen
+    chatPopup.classList.add('ist-da');
+  };
+
+  $('chatPopupSchliessen').addEventListener('click', e => {
+    e.stopPropagation();
+    chatPopup.classList.remove('ist-da');
+  });
+  chatPopup.addEventListener('click', () => {
+    const id = chatPopup.dataset.anfrageId;
+    chatPopup.classList.remove('ist-da');
+    if (id) {
+      oeffne(id);
+      setTimeout(() => $('chatKarte')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+    }
+  });
+
+  async function pruefeNeueNachrichten() {
+    const vorher = new Map(anfragen.map(a => [a.id, kundenNachrichten(a).length]));
+    const warInDetailAnsicht = detail.classList.contains('is-active');
+
+    await laden();
+    if (warInDetailAnsicht) { dashboard.style.display = 'none'; detail.classList.add('is-active'); }
+
+    if (ersteNachrichtenpruefung) { ersteNachrichtenpruefung = false; return; }
+
+    anfragen.forEach(a => {
+      const neue = kundenNachrichten(a);
+      if (neue.length > (vorher.get(a.id) || 0)) zeigeChatPopup(a, neue[neue.length - 1]);
+    });
+
+    // Offenen Chat gleich mitaktualisieren, ohne die Preisfelder anzufassen.
+    if (aktiv) {
+      const frisch = anfragen.find(a => a.id === aktiv.id);
+      if (frisch) { aktiv = frisch; zeigeChat(); }
+    }
+  }
+  setInterval(pruefeNeueNachrichten, 25000);
 
   $('chatSendenBtn').addEventListener('click', async () => {
     if (!aktiv) return;
