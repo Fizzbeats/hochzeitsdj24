@@ -35,7 +35,7 @@ const CONFIG = {
     satz_empfang: 35.00,        // € pro Stunde, Sektempfang / Hintergrundmusik (interne Kalkulation)
     satz_party: 70.00,          // € pro Stunde, Party (interne Kalkulation)
     technik: 150.00,            // Technik Variante A: 2 Boxen, LED-Licht, 1 Funkmikrofon
-    technik_b: 250.00,          // Technik Variante B: große Anlage, 4 Funkmikros, Floorspots
+    technik_b: 250.00,          // Technik Variante B: große Anlage, 4 Funkmikros (Floorspots separat, siehe unten)
     entertainment: 100.00,      // Pauschale Entertainmentprogramm
     kinderanimation: 50.00,     // 30–60 Minuten Programm, 50–250 € je nach Umfang (Ansatz)
     floorspots: 100.00,         // Floorspot-Lichter in Wunschfarbe, zubuchbar unabhängig von der Technik-Variante
