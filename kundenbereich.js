@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
       entertainment: l.entertainment, kinderanimation: l.kinderanimation,
       open_end: e.open_end,
       fotobox: l.fotobox, fotobox_variante: l.fotobox_variante,
-      remix: l.remix,
+      remix: l.remix, floorspots: l.floorspots,
       rabatt: p.rabatt || 0,
       remixKorrekturenExtra: p.remix_korrekturen_extra || 0
     };

@@ -38,6 +38,7 @@ const CONFIG = {
     technik_b: 250.00,          // Technik Variante B: große Anlage, 4 Funkmikros, Floorspots
     entertainment: 100.00,      // Pauschale Entertainmentprogramm
     kinderanimation: 50.00,     // 30–60 Minuten Programm, 50–250 € je nach Umfang (Ansatz)
+    floorspots: 100.00,         // Floorspot-Lichter in Wunschfarbe, zubuchbar unabhängig von der Technik-Variante
     open_end: 100.00,           // Party Open End, pauschal ab 1 Uhr
     fotobox: 0.00,              // veraltet, bleibt für alte Anfragen
     fotobox_standard: 200.00,   // digitale Bilder per E-Mail, ohne Ausdruck

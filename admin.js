@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
              entertainment: l.entertainment, kinderanimation: l.kinderanimation,
              open_end: e.open_end,
              fotobox: l.fotobox, fotobox_variante: l.fotobox_variante,
-             remix: l.remix, rabatt: p.rabatt || 0,
+             remix: l.remix, floorspots: l.floorspots, rabatt: p.rabatt || 0,
              remixKorrekturenExtra: p.remix_korrekturen_extra || 0 };
   };
 
@@ -351,7 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
       zeile('Programm', ja(l.entertainment)) +
       zeile('Kinderanimation', ja(l.kinderanimation)) +
       zeile('Fotobox', l.fotobox_variante === 'deluxe' ? 'Deluxe' : l.fotobox_variante === 'standard' ? 'Standard' : (l.fotobox ? 'Ja' : '—')) +
-      zeile('Hochzeitstanz Produktion', ja(l.remix));
+      zeile('Hochzeitstanz Produktion', ja(l.remix)) +
+      zeile('Floorspot-Lichter', ja(l.floorspots));
 
     $('detailMusik').innerHTML =
       zeile('Eröffnungstanz', l.eroeffnungstanz) + zeile('Musikrichtungen', m.stile) +
@@ -424,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('pEntertainment').value = p.entertainment ?? CONFIG.preise.entertainment;
     $('pOpenEnd').value = p.open_end ?? CONFIG.preise.open_end;
     $('pKinderanimation').value = p.kinderanimation ?? CONFIG.preise.kinderanimation;
+    $('pFloorspots').value = p.floorspots ?? CONFIG.preise.floorspots;
 
     const fotoDeluxe = l.fotobox_variante === 'deluxe';
     $('pFotoboxLabel').textContent = `Fotobox ${fotoDeluxe ? 'Deluxe' : 'Standard'} (€)`;
@@ -505,6 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
     entertainment: parseFloat($('pEntertainment').value) || 0,
     open_end: parseFloat($('pOpenEnd').value) || 0,
     kinderanimation: parseFloat($('pKinderanimation').value) || 0,
+    floorspots: parseFloat($('pFloorspots').value) || 0,
     fotobox: parseFloat($('pFotobox').value) || 0,
     fotobox_standard: parseFloat($('pFotobox').value) || 0,
     fotobox_deluxe: parseFloat($('pFotobox').value) || 0,
@@ -529,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
       z(`davon ${p.mwst_satz}% MwSt. enthalten`, euro(r.mwst));
   }
 
-  ['pPaket','satzEmpfang','satzParty','pTechnik','pEntertainment','pOpenEnd','pKinderanimation','pFotobox','pRemix','pRemixKorrektur','remixKorrekturenExtra','rabatt']
+  ['pPaket','satzEmpfang','satzParty','pTechnik','pEntertainment','pOpenEnd','pKinderanimation','pFloorspots','pFotobox','pRemix','pRemixKorrektur','remixKorrekturenExtra','rabatt']
     .forEach(id => $(id).addEventListener('input', rechne));
 
   /* ---------- PDF, Freigabe, Zahlung, Löschen ---------- */

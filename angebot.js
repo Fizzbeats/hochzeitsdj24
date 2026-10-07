@@ -153,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fotobox_variante: an('fotobox_deluxe') ? 'deluxe' : an('fotobox_standard') ? 'standard' : 'keine',
         fotobox: an('fotobox_standard') || an('fotobox_deluxe'),
         remix: an('remix'),
+        floorspots: an('floorspots'),
         eroeffnungstanz: v('eroeffnungstanz')
       },
       musik: {
@@ -258,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ['Kinderanimation', ja(d.leistungen.kinderanimation)],
       ['Fotobox', d.leistungen.fotobox_variante === 'deluxe' ? 'Deluxe' : d.leistungen.fotobox_variante === 'standard' ? 'Standard' : '—'],
       ['Hochzeitstanz Produktion', ja(d.leistungen.remix)],
+      ['Floorspot-Lichter', ja(d.leistungen.floorspots)],
       ...(d.event.anlass === 'Hochzeit' ? [['Eröffnungstanz', d.leistungen.eroeffnungstanz || '—']] : [])
     ];
 
@@ -393,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Empfehlung live aktualisieren, während der Kunde bei
      "Leistungen" etwas ändert (Technik, Entertainment, Fotobox ...) ---------- */
-  ['technik_variante', 'entertainment', 'kinderanimation', 'fotobox_standard', 'fotobox_deluxe', 'remix']
+  ['technik_variante', 'entertainment', 'kinderanimation', 'fotobox_standard', 'fotobox_deluxe', 'remix', 'floorspots']
     .forEach(name => {
       form.querySelectorAll(`[name="${name}"]`).forEach(feld =>
         feld.addEventListener('change', () => {

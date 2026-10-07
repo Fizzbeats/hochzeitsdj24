@@ -47,7 +47,7 @@ function vertragsdatenAusWizard(daten, preise, paket) {
     entertainment: l.entertainment, kinderanimation: l.kinderanimation,
     open_end: e.open_end,
     fotobox: l.fotobox, fotobox_variante: l.fotobox_variante,
-    remix: l.remix, rabatt: 0, remixKorrekturenExtra: 0
+    remix: l.remix, floorspots: l.floorspots, rabatt: 0, remixKorrekturenExtra: 0
   };
 }
 
@@ -180,6 +180,10 @@ function berechneVertrag(daten, preise) {
   if (daten.kinderanimation && (preise.kinderanimation || 0) > 0) {
     zusatz.push({ label: 'Kinderanimation:', betrag: preise.kinderanimation });
     summe += preise.kinderanimation;
+  }
+  if (daten.floorspots && (preise.floorspots || 0) > 0) {
+    zusatz.push({ label: 'Floorspot-Lichter in Wunschfarbe:', betrag: preise.floorspots });
+    summe += preise.floorspots;
   }
   if (daten.open_end && !imPaket('open_end') && (preise.open_end || 0) > 0) {
     zusatz.push({ label: 'Party Open End (ab 1 Uhr):', betrag: preise.open_end });
