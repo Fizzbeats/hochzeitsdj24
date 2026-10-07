@@ -145,24 +145,25 @@ body { --line: rgba(43, 36, 24, 0.14); }
 /* Zusätzliche Details je Kachel — klappen beim Überfahren mit der Maus auf.
    Auf Touch-Geräten (kein Hover) sind sie dauerhaft sichtbar. */
 .opt__more {
+  interpolate-size: allow-keywords;
   font-size: 0.88rem;
   color: var(--grey);
   line-height: 1.6;
-  max-height: 0;
+  height: 0;
   margin: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.45s var(--ease), opacity 0.35s var(--ease), margin 0.45s var(--ease);
+  transition: height 0.45s var(--ease), opacity 0.35s var(--ease), margin 0.45s var(--ease);
 }
 .opt:hover .opt__more, .opt:focus-within .opt__more {
-  max-height: 12em;
+  height: auto;
   margin-top: 10px;
   opacity: 1;
   padding-top: 10px;
   border-top: 1px dashed var(--line);
 }
 @media (hover: none) {
-  .opt__more { max-height: none; margin-top: 10px; opacity: 1; padding-top: 10px; border-top: 1px dashed var(--line); }
+  .opt__more { height: auto; margin-top: 10px; opacity: 1; padding-top: 10px; border-top: 1px dashed var(--line); }
 }
 
 /* ---------- Navigation ---------- */
