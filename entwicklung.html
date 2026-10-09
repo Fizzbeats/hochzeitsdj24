@@ -136,6 +136,25 @@
   }
   .vorschlaege__fuss button:hover { color: var(--ink); }
   .live-hinweis { font-size: 0.78rem; color: var(--grey); margin-top: 6px; }
+
+  /* ---------- FAQ-Pflege ---------- */
+  .faq-karte {
+    border: 1px solid var(--line); border-radius: 12px; background: var(--white);
+    box-shadow: var(--weich); padding: 22px 24px; margin-bottom: 14px;
+  }
+  .faq-karte label { display: block; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--grey); margin-bottom: 6px; }
+  .faq-karte input, .faq-karte textarea {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--line); border-radius: 9px;
+    font-family: var(--font-text); font-size: 0.94rem; margin-bottom: 14px; background: var(--cream);
+  }
+  .faq-karte textarea { resize: vertical; min-height: 80px; }
+  .faq-karte input:focus, .faq-karte textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+  .faq-karte__zeile { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+  .faq-karte__status { font-size: 0.82rem; color: var(--grey); }
+  .faq-karte__loeschen { background: none; border: 0; color: #b23a3a; cursor: pointer; font-size: 0.85rem;
+    text-decoration: underline; padding: 8px 0; }
+  .faq-neu { border: 1px dashed var(--line); border-radius: 12px; padding: 22px 24px; }
 </style>
 </head>
 <body>
@@ -146,6 +165,7 @@
     <a href="#design">Design-System</a>
     <a href="#seiten">Seitenkarte</a>
     <a href="#funktionen">Funktionen</a>
+    <a href="#faq-pflege">FAQ</a>
     <a href="#stand">Stand</a>
     <a href="#vorschlaege">Vorschläge</a>
   </div>
@@ -249,6 +269,31 @@
             <li>Einnahmen zählen erst nach Kundenzusage</li>
           </ul>
         </div>
+      </div>
+    </section>
+
+    <section class="bloc" id="faq-pflege" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>FAQ bearbeiten</h2>
+        <p>
+          Landet direkt live auf der Startseite — ohne dass ich etwas am Code ändern muss.
+          Frage oder Antwort anpassen und auf „Speichern" klicken; zum Entfernen „Löschen".
+          Die Reihenfolge bestimmt, wie die Fragen auf der Startseite erscheinen.
+        </p>
+      </div>
+      <div id="faqListeEntw">
+        <p class="live-hinweis">Wird geladen …</p>
+      </div>
+      <div class="faq-neu">
+        <p style="font-weight:600;margin-bottom:14px">Neue Frage hinzufügen</p>
+        <form id="faqNeuForm">
+          <label for="faqNeuFrage">Frage</label>
+          <input id="faqNeuFrage" required>
+          <label for="faqNeuAntwort">Antwort</label>
+          <textarea id="faqNeuAntwort" required></textarea>
+          <button type="submit" class="btn btn--gold">Hinzufügen</button>
+          <span class="faq-karte__status" id="faqNeuStatus"></span>
+        </form>
       </div>
     </section>
 

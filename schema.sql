@@ -141,6 +141,45 @@ grant execute on function public.angebot_annehmen(uuid) to authenticated;
 grant execute on function public.rueckfrage_senden(uuid, text) to authenticated;
 grant execute on function public.chat_senden(uuid, text) to authenticated;
 
+-- ---------- FAQ (bearbeitbar im Entwickler-Bereich) ----------
+-- Liegt in der Datenbank statt fest im HTML, damit Jens die Fragen und
+-- Antworten selbst pflegen kann, ohne jedes Mal den Code zu ändern.
+create table if not exists public.faq (
+  id          uuid primary key default gen_random_uuid(),
+  reihenfolge int  not null default 0,
+  frage       text not null,
+  antwort     text not null,
+  geaendert_am timestamptz not null default now()
+);
+
+create index if not exists faq_reihenfolge_idx on public.faq (reihenfolge);
+
+alter table public.faq enable row level security;
+
+-- Jeder darf die FAQ lesen (öffentliche Startseite, auch ohne Anmeldung)
+drop policy if exists "faq lesen" on public.faq;
+create policy "faq lesen" on public.faq
+  for select to anon, authenticated using (true);
+
+-- Nur Verwalter (Jens, und Entwickler sind ja auch Verwalter) dürfen ändern
+drop policy if exists "faq verwalten" on public.faq;
+create policy "faq verwalten" on public.faq
+  for all to authenticated
+  using (public.ist_verwalter()) with check (public.ist_verwalter());
+
+-- Die sechs aktuellen Fragen einmalig übernehmen — läuft nur, wenn die
+-- Tabelle noch leer ist, damit ein erneutes Ausführen nichts verdoppelt.
+insert into public.faq (reihenfolge, frage, antwort)
+select * from (values
+  (0, 'Was ist im Paketpreis schon enthalten?', 'Alles, was auf der Paket-Karte steht — Sie zahlen die Pauschale, keine Stundenabrechnung und keine Überraschung danach. Zusatzwünsche wie eine zweite Technik-Variante, Kinderanimation oder Fotobox stehen einzeln mit Preis dabei, bevor Sie sich entscheiden.'),
+  (1, 'Muss ich mich anmelden, um ein Angebot zu bekommen?', 'Nein. Sie können die Angebotserstellung komplett ohne Konto durchlaufen und wir melden uns per E-Mail. Ein Konto lohnt sich nur, wenn Sie den Stand Ihrer Anfrage jederzeit online sehen möchten — das ist aber optional.'),
+  (2, 'Was, wenn mir das freigegebene Angebot nicht ganz passt?', 'Bevor Sie verbindlich zusagen, sehen Sie den vollständigen Preis schwarz auf weiß und können direkt im Kundenbereich mit Jens chatten — für Rückfragen oder Änderungswünsche. Erst wenn Sie zufrieden sind, nehmen Sie das Angebot an.'),
+  (3, 'Was passiert, wenn einer von euch krank wird?', 'Wir sind zu dritt und geben jedem Kollegen vorab Ihr komplettes Musikprofil und alle Absprachen mit. Ihr Abend findet in jedem Fall statt.'),
+  (4, 'Fahrt ihr auch außerhalb von Chemnitz?', 'Ja, deutschlandweit. Die Anfahrt hängt von der Entfernung ab und steht mit im Angebotsentwurf, bevor Sie sich festlegen.'),
+  (5, 'Wie schnell bekomme ich eine Antwort?', 'Spätestens übermorgen, meist schneller — und von Jens persönlich, nicht automatisch.')
+) as v(reihenfolge, frage, antwort)
+where not exists (select 1 from public.faq);
+
 -- =====================================================
 -- Automatische Löschung (DSGVO)
 -- Benötigt die Erweiterung pg_cron (in Supabase aktivierbar)

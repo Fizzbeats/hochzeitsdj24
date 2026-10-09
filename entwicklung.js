@@ -65,6 +65,89 @@ document.addEventListener('DOMContentLoaded', () => {
     liveChecks();
   });
 
+  /* ---------- FAQ bearbeiten ----------
+     Landet direkt in der Datenbank und erscheint beim nächsten Laden der
+     Startseite live dort — keine zweite Textquelle, kein Deploy nötig. */
+
+  async function ladeFaqEditor() {
+    const container = $('faqListeEntw');
+    let eintraege;
+    try {
+      eintraege = await DB.faqLaden();
+    } catch (e) {
+      container.innerHTML = `<p class="live-hinweis">Konnte nicht geladen werden: ${e.message}</p>`;
+      return;
+    }
+    if (!eintraege || !eintraege.length) {
+      container.innerHTML = '<p class="live-hinweis">Noch keine Fragen in der Datenbank — unten eine hinzufügen.</p>';
+      return;
+    }
+
+    container.innerHTML = eintraege.map((f, i) => `
+      <div class="faq-karte" data-id="${f.id}">
+        <label>Frage</label>
+        <input class="faq-frage" value="${f.frage.replace(/"/g, '&quot;')}">
+        <label>Antwort</label>
+        <textarea class="faq-antwort">${f.antwort.replace(/</g, '&lt;')}</textarea>
+        <div class="faq-karte__zeile">
+          <button type="button" class="btn btn--line faq-speichern">Speichern</button>
+          <span class="faq-karte__status"></span>
+          <button type="button" class="faq-karte__loeschen">Löschen</button>
+        </div>
+      </div>`).join('');
+  }
+
+  $('faqListeEntw').addEventListener('click', async e => {
+    const karte = e.target.closest('.faq-karte');
+    if (!karte) return;
+    const faqId = karte.dataset.id;
+    const status = karte.querySelector('.faq-karte__status');
+
+    if (e.target.classList.contains('faq-speichern')) {
+      status.textContent = 'Speichert …';
+      try {
+        await DB.faqSpeichern(faqId, {
+          frage: karte.querySelector('.faq-frage').value.trim(),
+          antwort: karte.querySelector('.faq-antwort').value.trim()
+        });
+        status.textContent = 'Gespeichert ✓';
+        setTimeout(() => { if (status.textContent === 'Gespeichert ✓') status.textContent = ''; }, 2500);
+      } catch (err) {
+        status.textContent = 'Fehler: ' + err.message;
+      }
+    }
+
+    if (e.target.classList.contains('faq-karte__loeschen')) {
+      if (!confirm('Diese Frage wirklich von der Startseite entfernen?')) return;
+      try {
+        await DB.faqLoeschen(faqId);
+        karte.remove();
+      } catch (err) {
+        status.textContent = 'Fehler: ' + err.message;
+      }
+    }
+  });
+
+  $('faqNeuForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const frageFeld = $('faqNeuFrage'), antwortFeld = $('faqNeuAntwort'), status = $('faqNeuStatus');
+    const frage = frageFeld.value.trim(), antwort = antwortFeld.value.trim();
+    if (!frage || !antwort) return;
+    status.textContent = 'Wird hinzugefügt …';
+    try {
+      const anzahl = $('faqListeEntw').querySelectorAll('.faq-karte').length;
+      await DB.faqErstellen(frage, antwort, anzahl);
+      frageFeld.value = '';
+      antwortFeld.value = '';
+      status.textContent = '';
+      await ladeFaqEditor();
+    } catch (err) {
+      status.textContent = 'Fehler: ' + err.message;
+    }
+  });
+
+  ladeFaqEditor();
+
   /* ---------- Hilfen ---------- */
 
   const dateiVorhanden = async pfad => {

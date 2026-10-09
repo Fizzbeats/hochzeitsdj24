@@ -319,12 +319,67 @@ const DB = (() => {
     localStorage.setItem('hdj24_profil_' + nutzer.email, JSON.stringify({ ...bisher, ...felder }));
   }
 
+  /* ---------- FAQ (bearbeitbar im Entwickler-Bereich) ----------
+     Öffentlich lesbar (auch ohne Anmeldung, für die Startseite), nur für
+     Verwalter/Entwickler schreibbar — die Datenbank setzt das über die
+     Zeilensicherheit durch, nicht dieser Code. */
+
+  async function faqLaden() {
+    const c = sb();
+    if (c) {
+      const { data, error } = await c.from('faq').select('*').order('reihenfolge');
+      if (error) throw error;
+      return data;
+    }
+    return JSON.parse(localStorage.getItem('hdj24_faq') || 'null');
+  }
+
+  async function faqErstellen(frage, antwort, reihenfolge) {
+    const c = sb();
+    if (c) {
+      const { data, error } = await c.from('faq')
+        .insert({ frage, antwort, reihenfolge }).select().single();
+      if (error) throw error;
+      return data;
+    }
+    const alle = JSON.parse(localStorage.getItem('hdj24_faq') || '[]');
+    const eintrag = { id: id(), frage, antwort, reihenfolge };
+    alle.push(eintrag);
+    localStorage.setItem('hdj24_faq', JSON.stringify(alle));
+    return eintrag;
+  }
+
+  async function faqSpeichern(faqId, felder) {
+    const c = sb();
+    if (c) {
+      const { error } = await c.from('faq')
+        .update({ ...felder, geaendert_am: new Date().toISOString() }).eq('id', faqId);
+      if (error) throw error;
+      return;
+    }
+    const alle = JSON.parse(localStorage.getItem('hdj24_faq') || '[]');
+    const i = alle.findIndex(f => f.id === faqId);
+    if (i > -1) { alle[i] = { ...alle[i], ...felder }; localStorage.setItem('hdj24_faq', JSON.stringify(alle)); }
+  }
+
+  async function faqLoeschen(faqId) {
+    const c = sb();
+    if (c) {
+      const { error } = await c.from('faq').delete().eq('id', faqId);
+      if (error) throw error;
+      return;
+    }
+    const alle = JSON.parse(localStorage.getItem('hdj24_faq') || '[]');
+    localStorage.setItem('hdj24_faq', JSON.stringify(alle.filter(f => f.id !== faqId)));
+  }
+
   return {
     konfiguriert, speichereAnfrage, ladeAnfragen, ladeAnfrage,
     aktualisiere, freigeben, loeschen, angebotAnnehmen, rueckfrageSenden,
     chatSenden, chatVon,
     registrieren, anmelden, abmelden, aktuellerNutzer, istVerwalter, istEntwickler,
-    profilLesen, profilSchreiben
+    profilLesen, profilSchreiben,
+    faqLaden, faqErstellen, faqSpeichern, faqLoeschen
   };
 })();
 
