@@ -123,13 +123,16 @@ main {
   border-radius: 2px;
   background: var(--gold);
 }
-.fuehrung__blase.ist-hell .fuehrung__balken { background: rgba(255, 255, 255, 0.85); }
+.fuehrung__blase.ist-hell .fuehrung__balken { background: rgba(14, 13, 12, 0.55); }
 @keyframes balkenFuellen {
   from { width: 0; }
   to   { width: 100%; }
 }
-.fuehrung__blase.ist-hell { background: #c9a227; color: #fff; }
-.fuehrung__blase.ist-hell .fuehrung__schritt { color: rgba(255, 255, 255, 0.75); }
+/* Dunkler statt weißer Text auf dem goldenen Hintergrund — Weiß auf
+   #c9a227 lag bei nur ~2,4:1 Kontrast, deutlich unter den von der WCAG
+   geforderten 4,5:1 für Fließtext. Dunkler Text schafft über 8:1. */
+.fuehrung__blase.ist-hell { background: #c9a227; color: var(--ink); }
+.fuehrung__blase.ist-hell .fuehrung__schritt { color: rgba(14, 13, 12, 0.75); }
 
 .fuehrung__schritt {
   display: inline-flex;
@@ -153,7 +156,7 @@ main {
   0%, 100% { opacity: 0.55; transform: scale(0.85) rotate(0deg); }
   50% { opacity: 1; transform: scale(1.05) rotate(8deg); }
 }
-.fuehrung__blase.ist-hell .fuehrung__funke { color: #fff; }
+.fuehrung__blase.ist-hell .fuehrung__funke { color: var(--ink); }
 
 /* Kleiner Funken-Abschiedsgruß, wenn die Tour komplett durchlief */
 .fuehrung__jubel {

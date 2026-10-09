@@ -1174,18 +1174,19 @@ section { position: relative; }
 .faq__item p {
   display: block;
   overflow: hidden;
-  max-height: 0;
+  interpolate-size: allow-keywords;
+  height: 0;
   opacity: 0;
   margin: 0;
   padding: 0 56px 0 28px;
-  transition: max-height 0.4s var(--ease), opacity 0.3s ease, padding-bottom 0.4s var(--ease);
+  transition: height 0.4s var(--ease), opacity 0.3s ease, padding-bottom 0.4s var(--ease);
   color: var(--grey);
   font-size: 0.98rem;
   line-height: 1.68;
   max-width: 62ch;
 }
 .faq__item[open] p {
-  max-height: 300px;
+  height: auto;
   opacity: 1;
   padding-bottom: 26px;
 }
