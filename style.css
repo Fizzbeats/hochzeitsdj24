@@ -206,6 +206,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .wordmark span { color: var(--gold); }
 .header.is-stuck .wordmark { color: var(--ink); }
+/* Gold auf Weiß liegt nur bei ~3:1 Kontrast — zu wenig für Fließtext (WCAG
+   verlangt 4,5:1). Auf hellem Kopf (is-stuck/solid) deshalb das dunklere
+   --gold-deep, das schafft ~4,7:1. Auf dem dunklen/transparenten Hero bleibt
+   das normale Gold, dort ist der Kontrast zum Hintergrund unkritisch. */
+.header.is-stuck .wordmark span,
+.header--solid .wordmark span { color: var(--gold-deep); }
 .wordmark--light { color: var(--white); }
 
 /* Bei geöffnetem Menü liegt der Kopf über der dunklen Fläche */
@@ -688,7 +694,17 @@ section { position: relative; }
   flex-shrink: 0;
   padding-top: 2px;
 }
-.flow__list h4 { margin-bottom: 6px; }
+/* Semantisch h3 (folgt direkt auf das h2 der Sektion), optisch aber weiter
+   wie die übrigen Unterüberschriften im Fließtext-Stil, nicht wie ein
+   großer, serifenbetonter h3-Titel. */
+.flow__list h3 {
+  font-size: 1.05rem;
+  font-family: var(--font-text);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
 .flow__list p { font-size: 0.93rem; color: var(--grey); margin: 0; }
 .flow__note {
   text-align: center;
@@ -748,14 +764,14 @@ section { position: relative; }
   grid-template-columns: repeat(6, 1fr);
   gap: 20px;
 }
-.gallery__grid > :nth-child(1) { grid-column: span 2; }
-.gallery__grid > :nth-child(2) { grid-column: span 4; }
-.gallery__grid > :nth-child(3) { grid-column: span 2; }
+.gallery__grid > :nth-child(1) { grid-column: span 6; }
+.gallery__grid > :nth-child(2) { grid-column: span 2; }
+.gallery__grid > :nth-child(3) { grid-column: span 4; }
 .gallery__grid > :nth-child(4) { grid-column: span 4; }
 .gallery__grid > :nth-child(5) { grid-column: span 2; }
 .gallery__grid > :nth-child(6) { grid-column: span 2; }
 .gallery__grid > :nth-child(7) { grid-column: span 2; }
-.gallery__grid > :nth-child(8) { grid-column: span 6; }
+.gallery__grid > :nth-child(8) { grid-column: span 2; }
 .ph--banner { aspect-ratio: 21/8; }
 
 /* ---------- Zitat ---------- */
@@ -826,7 +842,15 @@ section { position: relative; }
   z-index: 3;
 }
 .tier--feature:hover { box-shadow: 0 32px 64px rgba(0, 0, 0, 0.42); }
-.tier:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+/* Fokus liegt jetzt auf dem Hinweis-/Schließen-Button, nicht mehr auf der
+   ganzen Karte (siehe script.js) — dort auch der sichtbare Fokusring. */
+.tier__hinweis:focus-visible,
+.tier__zurueck:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
 
 .tier__innen { width: 100%; height: 100%; }
 .tier__flip {

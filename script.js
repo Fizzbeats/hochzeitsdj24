@@ -91,20 +91,38 @@ document.addEventListener('DOMContentLoaded', () => {
      Die Karte selbst ist kein Link mehr, sondern ein umschaltbarer Kippkörper
      — nur der "Paket wählen"-Link auf der Rückseite navigiert wirklich weg.
      Klicks auf diesen Link dürfen die Karte also nicht mehr zusätzlich
-     umdrehen. */
+     umdrehen.
+     Der Button sitzt bewusst nicht auf der ganzen Karte, sondern nur auf dem
+     "Bitte klicken"-Hinweis vorn bzw. dem "Schließen"-Hinweis hinten: ein
+     role="button" darf laut ARIA keine eigenen interaktiven Kinder haben,
+     und der echte "Paket wählen"-Link saß vorher genau in so einem
+     verschachtelten Button. Die jeweils abgewandte Seite bekommt
+     tabindex="-1", sonst lässt sie sich mit Tab anspringen, obwohl sie wegen
+     backface-visibility unsichtbar ist. */
   packs.forEach(el => {
-    const umdrehen = () => {
-      const geflippt = el.classList.toggle('ist-geflippt');
-      el.setAttribute('aria-pressed', String(geflippt));
+    const hinweis = el.querySelector('.tier__hinweis');
+    const zurueck = el.querySelector('.tier__zurueck');
+    const link = el.querySelector('.tier__cta');
+    if (!hinweis || !zurueck) return;
+
+    const zustandSetzen = (offen) => {
+      el.classList.toggle('ist-geflippt', offen);
+      hinweis.setAttribute('tabindex', offen ? '-1' : '0');
+      zurueck.setAttribute('tabindex', offen ? '0' : '-1');
+      if (link) link.setAttribute('tabindex', offen ? '0' : '-1');
     };
+    const umdrehen = () => zustandSetzen(!el.classList.contains('ist-geflippt'));
+
     el.addEventListener('click', e => {
       if (e.target.closest('a')) return;
       umdrehen();
     });
-    el.addEventListener('keydown', e => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      e.preventDefault();
-      umdrehen();
+    [hinweis, zurueck].forEach(trigger => {
+      trigger.addEventListener('keydown', e => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        umdrehen();
+      });
     });
   });
 

@@ -32,11 +32,11 @@
 
       <!-- Anmelden -->
       <div class="tabpane is-active" id="pane-login">
-        <h2>Willkommen zurück</h2>
+        <h1>Willkommen zurück</h1>
         <p>Melden Sie sich an, um den Stand Ihrer Anfrage und Ihr Angebot zu sehen.</p>
 
         <form id="loginForm" autocomplete="on">
-          <div class="f"><label for="loginMail">E-Mail</label><input type="email" id="loginMail" name="email" autocomplete="username email"></div>
+          <div class="f"><label for="loginMail">E-Mail</label><input type="email" id="loginMail" name="email" autocomplete="email"></div>
           <div class="f"><label for="loginPw">Passwort</label><input type="password" id="loginPw" name="password" autocomplete="current-password"></div>
 
           <button type="submit" class="btn btn--gold btn--full" id="loginBtn">Anmelden</button>
@@ -50,11 +50,11 @@
 
       <!-- Registrieren -->
       <div class="tabpane" id="pane-register">
-        <h2>Konto anlegen</h2>
+        <h1>Konto anlegen</h1>
         <p>So bleiben Ihre Angaben gespeichert und Sie sehen jederzeit, wie weit Ihre Anfrage ist.</p>
 
         <form id="registerForm" autocomplete="on">
-          <div class="f"><label for="regMail">E-Mail</label><input type="email" id="regMail" name="email" autocomplete="username email"></div>
+          <div class="f"><label for="regMail">E-Mail</label><input type="email" id="regMail" name="email" autocomplete="email"></div>
           <div class="f"><label for="regPw">Passwort (mind. 8 Zeichen)</label><input type="password" id="regPw" name="new-password" autocomplete="new-password"></div>
           <div class="f"><label for="regPw2">Passwort wiederholen</label><input type="password" id="regPw2" name="new-password2" autocomplete="new-password"></div>
 
@@ -80,7 +80,7 @@
 <section class="wizard" id="ladeFehlerBereich" style="display:none">
   <div class="shell" style="max-width:560px">
     <div class="notice notice--fehler">
-      <h4>Ihr Angebot konnte nicht geladen werden</h4>
+      <h1>Ihr Angebot konnte nicht geladen werden</h1>
       <p id="ladeFehlerText">Bitte prüfen Sie Ihre Internetverbindung.</p>
       <button class="btn btn--line" id="ladeFehlerRetry" style="margin-top:16px">Nochmal versuchen</button>
     </div>
@@ -124,7 +124,7 @@
     <div id="wartet" style="display:none">
       <div class="notice notice--wartet">
         <span class="notice__eq" aria-hidden="true"><i></i><i></i><i></i></span>
-        <h4>Ihr Angebot wird noch geprüft</h4>
+        <h2>Ihr Angebot wird noch geprüft</h2>
         <p>
           Ihre Angaben sind bei uns eingegangen. Jens Winter sieht den Entwurf gerade durch.
           Sobald er freigegeben ist, finden Sie ihn hier zum Herunterladen — Sie bekommen
@@ -137,7 +137,7 @@
          Steht unabhängig vom Freigabe-Status zur Verfügung, damit Rückfragen
          auch schon während der Prüfung möglich sind. -->
     <div class="notice" id="chatKarte" style="margin-top:24px">
-      <h4>Ihr Draht zum DJ</h4>
+      <h2>Ihr Draht zum DJ</h2>
       <p style="margin-bottom:18px">
         Fragen zum Preis, Änderungswünsche oder kurzes Feedback — hier lesen Sie und
         Jens denselben Verlauf.
