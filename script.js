@@ -147,4 +147,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
+  /* ---- Anker zu "#team" zeigt sonst nur die Köpfe, nicht die Namen ----
+     Die Köpfe + Kicker + Überschrift sind auf kürzeren Bildschirmen (z.B.
+     1366×768) zusammen schon höher als der Viewport, der normale
+     Anker-Sprung landet also genau an der Falz. Nach dem Sprung notfalls
+     um den fehlenden Rest nachscrollen, damit der erste Name sichtbar ist. */
+  const teamNachjustieren = () => {
+    if (location.hash !== '#team') return;
+    const name = document.querySelector('#team .team__grid h3');
+    if (!name) return;
+    const fertig = () => {
+      const ueberstand = name.getBoundingClientRect().bottom - window.innerHeight;
+      if (ueberstand > 0) {
+        window.scrollBy({ top: ueberstand + 16, behavior: reduced ? 'auto' : 'smooth' });
+      }
+    };
+    if ('onscrollend' in window) {
+      const einmal = () => { window.removeEventListener('scrollend', einmal); setTimeout(fertig, 30); };
+      window.addEventListener('scrollend', einmal);
+    } else {
+      setTimeout(fertig, 500);
+    }
+  };
+  window.addEventListener('hashchange', teamNachjustieren);
+  document.querySelectorAll('a[href$="#team"]').forEach(a => a.addEventListener('click', teamNachjustieren));
+
 });

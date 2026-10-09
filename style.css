@@ -560,6 +560,12 @@ section { position: relative; }
 .section-head--center .kicker { justify-content: center; }
 .section-head__lead { color: var(--grey); max-width: 52ch; margin-top: 1.6rem; font-size: 1.08rem; }
 
+/* Beim Sprung per Anker (z.B. "Das Team kennenlernen") landet #team mit dem
+   normalen Innenabstand oft so, dass die Namen unter dem Grid gerade noch
+   unter der Falz liegen — hier etwas knapper, damit sie direkt sichtbar sind. */
+.team { padding-top: clamp(56px, 6vw, 110px); }
+.team .section-head { margin-bottom: clamp(32px, 4vw, 56px); }
+
 .muted-note {
   font-size: 0.9rem;
   color: var(--grey);
