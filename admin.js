@@ -86,11 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
     ladeschirmWeg();
   };
 
-  const zeigePanel = () => {
+  const zeigePanel = async () => {
     $('auth').style.display = 'none';
     $('panel').style.display = 'block';
     demoDatenAnlegen();
-    pruefeNeueNachrichten(); // lädt die Liste UND legt sofort den Vergleichsstand an
+    // Muss abgewartet werden, bevor die Tour startet — sonst sucht sie sich
+    // ihre erste Anfragen-Zeile, bevor die Liste überhaupt geladen ist, und
+    // bricht dann vorzeitig nach Schritt 4 ab (Freigeben/Chat fehlen).
+    await pruefeNeueNachrichten();
     window.starteCockpitFuehrung?.();
   };
 
