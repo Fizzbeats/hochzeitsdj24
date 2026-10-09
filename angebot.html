@@ -25,8 +25,8 @@
     <p class="kicker">Angebotserstellung</p>
     <h1>Ihr Angebot,<br>aus Ihren Angaben</h1>
     <p>
-      Ein paar Fragen zu Ihrer Feier, mehr brauchen wir nicht. Jens setzt daraus Ihr
-      Angebot auf, schaut persönlich drüber und gibt es für Sie frei — mit allen
+      Ein paar Fragen zu Ihrer Feier, mehr brauchen wir nicht. Wir setzen daraus Ihr
+      Angebot auf, schauen persönlich drüber und geben es für Sie frei — mit allen
       Preisen schwarz auf weiß, bevor Sie sich festlegen. Erst wenn Sie das Angebot
       annehmen, wird daraus ein Vertrag.
     </p>
@@ -106,7 +106,7 @@
       <div class="step" data-step="3" data-name="Zeiten">
         <div class="step__head">
           <h2>Wann geht's los?</h2>
-          <p>Grobe Zeiten reichen völlig — die Feinheiten klären wir sowieso noch persönlich.</p>
+          <p>Grobe Zeiten reichen völlig — alles Weitere klären wir sowieso noch persönlich.</p>
         </div>
 
         <div class="grid-2">
@@ -140,44 +140,60 @@
           <p>Was soll neben der Musik dabei sein?</p>
         </div>
 
+        <div class="f" style="margin-bottom:12px"><label>Welcher DJ soll auflegen?</label></div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="dj_wunsch" value="egal" checked><span class="opt__mark"></span>
+            <div class="opt__title">Keine Präferenz</div>
+            <p class="opt__desc">Wir teilen intern ein, wer Zeit hat.</p></label>
+          <label class="opt"><input type="radio" name="dj_wunsch" value="jens"><span class="opt__mark"></span>
+            <div class="opt__title">Jens Winter</div>
+            <p class="opt__desc">DJ Double J.</p></label>
+          <label class="opt"><input type="radio" name="dj_wunsch" value="nico"><span class="opt__mark"></span>
+            <div class="opt__title">Nico Mahn</div>
+            <p class="opt__desc">DJ Boofy.</p></label>
+          <label class="opt"><input type="radio" name="dj_wunsch" value="markus"><span class="opt__mark"></span>
+            <div class="opt__title">Markus Schaufuss</div>
+            <p class="opt__desc">DJ Markx.</p></label>
+        </div>
+
         <div class="f" style="margin-bottom:12px"><label>Ton- und Lichttechnik</label></div>
         <div class="opts">
           <label class="opt"><input type="radio" name="technik_variante" value="A" checked><span class="opt__mark"></span>
             <div class="opt__title">Technik Variante A</div>
-            <p class="opt__desc">Die bewährte Anlage für die meisten Feiern.</p>
+            <p class="opt__desc">Die bewährte Anlage für die meisten Feiern. 150&nbsp;€ Grundpreis.</p>
             <p class="opt__more">2 Boxen, LED-Lichttechnik und ein Funkmikrofon für Reden und Spiele — passend für Räume bis etwa 100 Gäste.</p></label>
 
           <label class="opt"><input type="radio" name="technik_variante" value="B"><span class="opt__mark"></span>
             <div class="opt__title">Technik Variante B</div>
-            <p class="opt__desc">Die große Anlage für große Säle und Programme.</p>
-            <p class="opt__more">Erweiterte Beschallung mit zusätzlichen Boxen, LED-Lichttechnik und vier Funkmikrofonen.</p></label>
+            <p class="opt__desc">Die große Anlage mit Ambientelicht für große Säle und Programme. 250&nbsp;€ Grundpreis.</p>
+            <p class="opt__more">Erweiterte Beschallung mit zusätzlichen Boxen, LED-Lichttechnik, stimmungsvollem Ambientelicht und vier Funkmikrofonen.</p></label>
 
           <label class="opt"><input type="radio" name="technik_variante" value="keine"><span class="opt__mark"></span>
-            <div class="opt__title">Ohne Technik</div>
-            <p class="opt__desc">Vor Ort ist bereits eine Anlage vorhanden.</p>
-            <p class="opt__more">Wir bringen nur die Abspieltechnik mit und schließen uns an die vorhandene Anlage Ihrer Location an.</p></label>
+            <div class="opt__title">Ohne Technik, nur Controller</div>
+            <p class="opt__desc">Vor Ort ist bereits eine Anlage vorhanden. 35&nbsp;€ pauschal.</p>
+            <p class="opt__more">Wir bringen nur unseren Controller mit und schließen uns an die vorhandene Anlage Ihrer Location an.</p></label>
         </div>
 
         <div class="f" style="margin-bottom:12px"><label>Programm und Extras</label></div>
         <div class="opts">
           <label class="opt"><input type="checkbox" name="entertainment"><span class="opt__mark"></span>
             <div class="opt__title">Entertainmentprogramm</div>
-            <p class="opt__desc" id="entertainmentDesc">Moderation von Spielen, Torte, Brautstraußwerfen und weiteren Programmpunkten.</p>
+            <p class="opt__desc" id="entertainmentDesc">Moderation von Spielen, Torte, Brautstraußwerfen und weiteren Programmpunkten. Ab 100&nbsp;€.</p>
             <p class="opt__more">Wir führen als Moderatoren durch den Abend: Hochzeitsspiele mit Brautpaar und Trauzeugen, Anschneiden der Torte, Brautstraußwerfen — alles nach Ihren Vorgaben, dezent statt marktschreierisch.</p></label>
 
           <label class="opt"><input type="checkbox" name="kinderanimation"><span class="opt__mark"></span>
             <div class="opt__title">Kinderanimation</div>
-            <p class="opt__desc">30–60 Minuten Programm für die kleinen Gäste.</p>
+            <p class="opt__desc">30–60 Minuten Programm für die kleinen Gäste. Ab 50&nbsp;€, je nach Umfang.</p>
             <p class="opt__more">Spiele, Tanzrunden und Beschäftigung für die Kinder, während die Großen feiern — Umfang und Preis stimmen wir im Angebot auf Ihre Feier ab.</p></label>
 
           <label class="opt"><input type="checkbox" name="fotobox_standard"><span class="opt__mark"></span>
             <div class="opt__title">Fotobox Standard</div>
-            <p class="opt__desc">Alle Bilder digital per E-Mail.</p>
+            <p class="opt__desc">Alle Bilder digital per E-Mail. 200&nbsp;€ pauschal.</p>
             <p class="opt__more">Die Fotobox steht den ganzen Abend bereit, mit Requisiten. Alle Aufnahmen erhalten Sie gesammelt digital per E-Mail — ohne Ausdruck vor Ort.</p></label>
 
           <label class="opt"><input type="checkbox" name="fotobox_deluxe"><span class="opt__mark"></span>
             <div class="opt__title">Fotobox Deluxe</div>
-            <p class="opt__desc">Digitale Bilder plus Sofortausdruck vor Ort.</p>
+            <p class="opt__desc">Digitale Bilder plus Sofortausdruck vor Ort. 250&nbsp;€ pauschal.</p>
             <p class="opt__more">Wie Standard — zusätzlich drucken Ihre Gäste bis zu 108 Bilder direkt vor Ort aus und nehmen sie als Erinnerung mit.</p></label>
 
           <label class="opt"><input type="checkbox" name="remix"><span class="opt__mark"></span>
@@ -194,6 +210,16 @@
               <img src="medien/floorspot-3.jpg" alt="Floorspot-Licht in Blau" loading="lazy">
             </div>
             <p class="opt__more">Zusätzliche Bodenstrahler setzen Wände und Tanzfläche in Szene — Farbe ganz nach Ihrem Wunsch, unabhängig von der gewählten Technik-Variante.</p></label>
+
+          <label class="opt"><input type="checkbox" name="audio_gaestebuch"><span class="opt__mark"></span>
+            <div class="opt__title">Audio-Gästebuch</div>
+            <p class="opt__desc">Ihre Gäste hinterlassen gesprochene Glückwünsche. 50&nbsp;€ pauschal.</p>
+            <p class="opt__more">Ein Mikrofon mit Aufnahmegerät liegt für Ihre Gäste bereit — statt nur zu schreiben, nehmen sie eine persönliche Sprachnachricht auf. Sie erhalten alle Aufnahmen gesammelt nach der Feier.</p></label>
+
+          <label class="opt"><input type="checkbox" name="mini_disco"><span class="opt__mark"></span>
+            <div class="opt__title">Mini-Disco für die Kinder</div>
+            <p class="opt__desc">20–30 Minuten eigenes Programm für die kleinen Gäste. 50&nbsp;€ pauschal.</p>
+            <p class="opt__more">Eine kurze, eigene Tanzrunde nur für die Kinder — mit Musik, die sie wirklich mitreißt, während die Erwachsenen weiterfeiern.</p></label>
         </div>
 
         <div class="f" id="eroeffnungstanzFeld"><label for="eroeffnungstanz">Lied für den Eröffnungstanz</label>
@@ -294,10 +320,10 @@
     <!-- ---------- Erfolg ---------- -->
     <div class="done" id="done">
       <div class="done__mark">✓</div>
-      <h2>Vielen Dank</h2>
+      <h1>Vielen Dank</h1>
       <p id="doneText">
-        Ihre Angaben sind bei uns eingegangen. Jens Winter prüft Ihr Angebot persönlich und
-        gibt es anschließend frei – Sie erhalten dann eine E-Mail von uns.
+        Ihre Angaben sind bei uns eingegangen. Wir prüfen Ihr Angebot persönlich und
+        geben es anschließend frei – Sie erhalten dann eine E-Mail von uns.
         Für Rückfragen erreichen Sie uns unter 0176 – 77 444 888.
       </p>
     </div>

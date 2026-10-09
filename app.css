@@ -278,6 +278,9 @@ body { --line: rgba(43, 36, 24, 0.14); }
 .notice h4 { margin-bottom: 10px; }
 .notice p { font-size: 0.98rem; color: var(--ink-80); margin: 0; }
 .notice--fehler { border-left-color: #b23a3a; background: rgba(178, 58, 58, 0.07); }
+/* Preis in der Live-Empfehlung ("voraussichtlicher Preis") betont, statt im
+   Fließtext unterzugehen. */
+.preis-hervorgehoben { color: var(--gold-deep); font-weight: 700; }
 .notice--fehler h4 { color: #b23a3a; }
 /* Je nachdem, wo ein Hinweiskasten im Dokument auftaucht, muss sein Titel
    auf h1, h2 oder h3 stehen, damit keine Überschriftenebene übersprungen
@@ -393,7 +396,7 @@ body { --line: rgba(43, 36, 24, 0.14); }
   color: var(--gold);
   font-size: 1.4rem;
 }
-.done h2 { margin-bottom: 1.4rem; }
+.done h1 { margin-bottom: 1.4rem; font-size: clamp(1.9rem, 3.7vw, 3.1rem); }
 .done p { color: var(--grey); max-width: 52ch; margin-inline: auto; font-size: 1.05rem; }
 
 /* ---------- Profil ---------- */

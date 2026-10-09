@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('chatVerlauf').innerHTML = chat.length
       ? chat.map(n => `
           <div class="chat__nachricht ${n.von === 'kunde' ? 'chat__nachricht--ich' : ''}">
-            <span class="chat__von">${n.von === 'kunde' ? 'Sie' : 'Jens (DJ)'}</span>
+            <span class="chat__von">${n.von === 'kunde' ? 'Sie' : 'Wir'}</span>
             <p>${(n.text || '').replace(/</g, '&lt;')}</p>
             ${n.zeit ? `<span class="chat__zeit">${new Date(n.zeit).toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
           </div>`).join('')
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await DB.chatSenden(anfrage.id, text);
       anfrage = await DB.ladeAnfrage(anfrage.id) || anfrage;
       $('chatText').value = '';
-      $('chatStatus').textContent = 'Gesendet — Jens meldet sich bei Ihnen.';
+      $('chatStatus').textContent = 'Gesendet — wir melden uns bei Ihnen.';
       zeigeChat();
     } catch (e) {
       $('chatStatus').textContent = 'Das hat nicht geklappt: ' + e.message;
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
       entertainment: l.entertainment, kinderanimation: l.kinderanimation,
       open_end: e.open_end,
       fotobox: l.fotobox, fotobox_variante: l.fotobox_variante,
-      remix: l.remix, floorspots: l.floorspots,
+      remix: l.remix, floorspots: l.floorspots, audio_gaestebuch: l.audio_gaestebuch, mini_disco: l.mini_disco,
       rabatt: p.rabatt || 0,
       remixKorrekturenExtra: p.remix_korrekturen_extra || 0
     };

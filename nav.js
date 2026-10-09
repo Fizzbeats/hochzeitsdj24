@@ -87,7 +87,7 @@
           </div>
           <div class="nav__kontakt">
             <a href="tel:+4917677444888">0176 – 77 444 888</a>
-            <a href="mailto:jenswinter@email.de">jenswinter@email.de</a>
+            <a href="mailto:Hochzeitsdj24@email.de">Hochzeitsdj24@email.de</a>
           </div>
         </div>
       </div>

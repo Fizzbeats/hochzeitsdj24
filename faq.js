@@ -23,12 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Datenbank (noch) nicht konfiguriert ist oder das Laden fehlschlägt,
   // damit die Seite nie ohne FAQ dasteht.
   const STANDARD_FAQ = [
-    { frage: 'Was ist im Paketpreis schon enthalten?', antwort: 'Alles, was auf der Paket-Karte steht — Sie zahlen die Pauschale, keine Stundenabrechnung und keine Überraschung danach. Zusatzwünsche wie eine zweite Technik-Variante, Kinderanimation oder Fotobox stehen einzeln mit Preis dabei, bevor Sie sich entscheiden.' },
-    { frage: 'Muss ich mich anmelden, um ein Angebot zu bekommen?', antwort: 'Nein. Sie können die Angebotserstellung komplett ohne Konto durchlaufen und wir melden uns per E-Mail. Ein Konto lohnt sich nur, wenn Sie den Stand Ihrer Anfrage jederzeit online sehen möchten — das ist aber optional.' },
-    { frage: 'Was, wenn mir das freigegebene Angebot nicht ganz passt?', antwort: 'Bevor Sie verbindlich zusagen, sehen Sie den vollständigen Preis schwarz auf weiß und können direkt im Kundenbereich mit Jens chatten — für Rückfragen oder Änderungswünsche. Erst wenn Sie zufrieden sind, nehmen Sie das Angebot an.' },
+    { frage: 'Was ist im Paketpreis schon enthalten?', antwort: 'Alles, was auf der Paket-Karte steht — Sie zahlen die Pauschale, keine Stundenabrechnung und keine Überraschung danach. Zusatzwünsche wie eine zweite Technik-Variante, Kinderanimation oder Fotobox können optional dazugebucht werden.' },
+    { frage: 'Muss ich mich anmelden, um ein Angebot zu bekommen?', antwort: 'Nein. Sie können die Angebotserstellung komplett ohne Anmeldung durchlaufen und wir melden uns per E-Mail. Eine Anmeldung lohnt sich nur, wenn Sie den Stand Ihrer Anfrage jederzeit online sehen möchten — das ist aber optional.' },
+    { frage: 'Was, wenn mir das freigegebene Angebot nicht ganz passt?', antwort: 'Bevor Sie verbindlich zusagen, sehen Sie das komplette Angebot schwarz auf weiß und können direkt im Kundenbereich mit uns chatten. Für Rückfragen und Änderungswünsche stehen wir Ihnen jederzeit gern zur Verfügung — erst wenn Sie zufrieden sind, nehmen Sie das Angebot an.' },
     { frage: 'Was passiert, wenn einer von euch krank wird?', antwort: 'Wir sind zu dritt und geben jedem Kollegen vorab Ihr komplettes Musikprofil und alle Absprachen mit. Ihr Abend findet in jedem Fall statt.' },
     { frage: 'Fahrt ihr auch außerhalb von Chemnitz?', antwort: 'Ja, deutschlandweit. Die Anfahrt hängt von der Entfernung ab und steht mit im Angebotsentwurf, bevor Sie sich festlegen.' },
-    { frage: 'Wie schnell bekomme ich eine Antwort?', antwort: 'Spätestens übermorgen, meist schneller — und von Jens persönlich, nicht automatisch.' }
+    { frage: 'Wie schnell bekomme ich eine Antwort?', antwort: 'Spätestens übermorgen, meist schneller — und von uns persönlich, nicht automatisch.' }
   ];
 
   let eintraege;

@@ -107,8 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!hochzeit) form.elements['eroeffnungstanz'].value = '';
     }
     if (entertainmentDesc) entertainmentDesc.textContent = hochzeit
-      ? 'Moderation von Spielen, Torte, Brautstraußwerfen und weiteren Programmpunkten.'
-      : 'Moderation von Spielen, Reden und weiteren Programmpunkten.';
+      ? 'Moderation von Spielen, Torte, Brautstraußwerfen und weiteren Programmpunkten. Ab 100 €.'
+      : 'Moderation von Spielen, Reden und weiteren Programmpunkten. Ab 100 €.';
     if (remixDesc) remixDesc.textContent = hochzeit
       ? 'Ihr Lied für den ersten Tanz, individuell für Sie produziert. 50 € inklusive zwei Korrekturschleifen, jede weitere 10 €.'
       : 'Ihr Wunschlied, individuell für Sie produziert. 50 € inklusive zwei Korrekturschleifen, jede weitere 10 €.';
@@ -146,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         open_end: an('open_end')
       },
       leistungen: {
+        dj_wunsch: form.querySelector('[name="dj_wunsch"]:checked')?.value || 'egal',
         technik_variante: form.querySelector('[name="technik_variante"]:checked')?.value || 'A',
         technik: (form.querySelector('[name="technik_variante"]:checked')?.value || 'A') !== 'keine',
         entertainment: an('entertainment'),
@@ -154,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fotobox: an('fotobox_standard') || an('fotobox_deluxe'),
         remix: an('remix'),
         floorspots: an('floorspots'),
+        audio_gaestebuch: an('audio_gaestebuch'),
+        mini_disco: an('mini_disco'),
         eroeffnungstanz: v('eroeffnungstanz')
       },
       musik: {
@@ -188,10 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!emp.paketId) {
       // Kein Paket passt zu Anlass/Dauer — trotzdem den Preis zeigen.
       document.getElementById('empfehlungTitel').textContent = 'Ihr voraussichtlicher Preis';
-      document.getElementById('empfehlungText').textContent =
-        `Nach Ihrer bisherigen Auswahl liegt Ihr Angebot bei etwa ${pdfHelfer.euro(emp.ohnePaketPreis)} ` +
+      document.getElementById('empfehlungText').innerHTML =
+        `Nach Ihrer bisherigen Auswahl liegt Ihr Angebot bei etwa <strong class="preis-hervorgehoben">${pdfHelfer.euro(emp.ohnePaketPreis)}</strong> ` +
         `(Einzelabrechnung nach Zeit und Leistungen — für Anlass und Dauer gibt es aktuell kein passendes Festpreis-Paket). ` +
-        `Der genaue Preis steht im Angebotsentwurf, den Jens Ihnen persönlich zusammenstellt.`;
+        `Der genaue Preis steht im Angebotsentwurf, den wir Ihnen persönlich zusammenstellen.`;
       btn.style.display = 'none';
       return;
     }
@@ -200,10 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // empfehlePaket in pdf.js) — darum hier nur noch dieser eine Fall.
     btn.style.display = '';
     document.getElementById('empfehlungTitel').textContent = `Tipp: Das Paket „${emp.name}“ wäre günstiger`;
-    document.getElementById('empfehlungText').textContent =
+    document.getElementById('empfehlungText').innerHTML =
       `Nach Ihrer Auswahl würden Sie einzeln abgerechnet ${pdfHelfer.euro(emp.ohnePaketPreis)} zahlen. ` +
-      `Mit dem Paket „${emp.name}“ zahlen Sie stattdessen ${pdfHelfer.euro(emp.preis)} pauschal — ` +
-      `${pdfHelfer.euro(emp.ersparnis)} gespart. Jens prüft das ohnehin nochmal persönlich.`;
+      `Mit dem Paket „${emp.name}“ zahlen Sie stattdessen <strong class="preis-hervorgehoben">${pdfHelfer.euro(emp.preis)}</strong> pauschal — ` +
+      `<strong class="preis-hervorgehoben">${pdfHelfer.euro(emp.ersparnis)}</strong> gespart. Wir prüfen das ohnehin nochmal persönlich.`;
     btn.textContent = `Paket „${emp.name}“ übernehmen`;
     btn.onclick = () => {
       const paketDaten = CONFIG.pakete[emp.paketId];
@@ -245,13 +248,17 @@ document.addEventListener('DOMContentLoaded', () => {
       ['Party', d.event.open_end ? `ab ${d.event.party_von} Uhr, Open End` : `${d.event.party_von} – ${d.event.party_bis} Uhr`]
     ];
 
+    const djName = { egal: 'Keine Präferenz', jens: 'Jens Winter (DJ Double J)', nico: 'Nico Mahn (DJ Boofy)', markus: 'Markus Schaufuss (DJ Markx)' };
     const leistungen = [
+      ['Gewünschter DJ', djName[d.leistungen.dj_wunsch] || djName.egal],
       ['Ton- und Lichttechnik', d.leistungen.technik ? `Variante ${d.leistungen.technik_variante}` : 'Eigene Technik vorhanden'],
       ['Entertainmentprogramm', ja(d.leistungen.entertainment)],
       ['Kinderanimation', ja(d.leistungen.kinderanimation)],
       ['Fotobox', d.leistungen.fotobox_variante === 'deluxe' ? 'Deluxe' : d.leistungen.fotobox_variante === 'standard' ? 'Standard' : '—'],
       ['Hochzeitstanz Produktion', ja(d.leistungen.remix)],
       ['Floorspot-Lichter', ja(d.leistungen.floorspots)],
+      ['Audio-Gästebuch', ja(d.leistungen.audio_gaestebuch)],
+      ['Mini-Disco für die Kinder', ja(d.leistungen.mini_disco)],
       ...(d.event.anlass === 'Hochzeit' ? [['Eröffnungstanz', d.leistungen.eroeffnungstanz || '—']] : [])
     ];
 
@@ -339,11 +346,15 @@ document.addEventListener('DOMContentLoaded', () => {
       form.style.display = 'none';
       navBtns.style.display = 'none';
       document.querySelector('.progress').style.display = 'none';
+      // Die Erklärtexte oben ("Ein paar Fragen zu Ihrer Feier …") passen nach dem
+      // Absenden nicht mehr — auf der fertigen Seite soll nur noch stehen, dass
+      // die Anfrage angekommen ist.
+      document.querySelector('.page-head').style.display = 'none';
 
       if (nutzer) {
         document.getElementById('doneText').innerHTML =
-          'Ihre Angaben sind bei uns eingegangen und Ihrem Konto zugeordnet. Jens Winter prüft ' +
-          'Ihr Angebot persönlich und gibt es anschließend frei.<br><br>' +
+          'Ihre Angaben sind bei uns eingegangen und Ihrem Konto zugeordnet. Wir prüfen ' +
+          'Ihr Angebot persönlich und geben es anschließend frei.<br><br>' +
           '<a href="kundenbereich.html" class="btn btn--gold">Zu meinem Bereich</a>';
       }
 
@@ -387,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Empfehlung live aktualisieren, während der Kunde bei
      "Leistungen" etwas ändert (Technik, Entertainment, Fotobox ...) ---------- */
-  ['technik_variante', 'entertainment', 'kinderanimation', 'fotobox_standard', 'fotobox_deluxe', 'remix', 'floorspots']
+  ['technik_variante', 'entertainment', 'kinderanimation', 'fotobox_standard', 'fotobox_deluxe', 'remix', 'floorspots', 'audio_gaestebuch', 'mini_disco']
     .forEach(name => {
       form.querySelectorAll(`[name="${name}"]`).forEach(feld =>
         feld.addEventListener('change', () => {

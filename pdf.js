@@ -47,7 +47,9 @@ function vertragsdatenAusWizard(daten, preise, paket) {
     entertainment: l.entertainment, kinderanimation: l.kinderanimation,
     open_end: e.open_end,
     fotobox: l.fotobox, fotobox_variante: l.fotobox_variante,
-    remix: l.remix, floorspots: l.floorspots, rabatt: 0, remixKorrekturenExtra: 0
+    remix: l.remix, floorspots: l.floorspots, audio_gaestebuch: l.audio_gaestebuch,
+    mini_disco: l.mini_disco,
+    rabatt: 0, remixKorrekturenExtra: 0
   };
 }
 
@@ -175,6 +177,10 @@ function berechneVertrag(daten, preise) {
       zusatz.push({ label: 'Aufpreis Technik Variante B:', betrag });
       summe += betrag;
     }
+  } else if (daten.technik_variante === 'keine' && (preise.technik_controller || 0) > 0) {
+    // Eigene Anlage vor Ort vorhanden — wir bringen nur den Controller mit
+    zusatz.push({ label: 'Ohne Technik, nur Controller:', betrag: preise.technik_controller });
+    summe += preise.technik_controller;
   }
   if (daten.entertainment && !imPaket('entertainment')) {
     zusatz.push({ label: 'Entertainmentprogramm:', betrag: preise.entertainment });
@@ -187,6 +193,14 @@ function berechneVertrag(daten, preise) {
   if (daten.floorspots && (preise.floorspots || 0) > 0) {
     zusatz.push({ label: 'Floorspot-Lichter in Wunschfarbe:', betrag: preise.floorspots });
     summe += preise.floorspots;
+  }
+  if (daten.audio_gaestebuch && (preise.audio_gaestebuch || 0) > 0) {
+    zusatz.push({ label: 'Audio-Gästebuch:', betrag: preise.audio_gaestebuch });
+    summe += preise.audio_gaestebuch;
+  }
+  if (daten.mini_disco && (preise.mini_disco || 0) > 0) {
+    zusatz.push({ label: 'Mini-Disco für die Kinder:', betrag: preise.mini_disco });
+    summe += preise.mini_disco;
   }
   if (daten.open_end && !imPaket('open_end') && (preise.open_end || 0) > 0) {
     zusatz.push({ label: 'Party Open End (ab 1 Uhr):', betrag: preise.open_end });
@@ -454,7 +468,7 @@ function erzeugeVertragsPDF(daten, config) {
   doc.setTextColor(40, 40, 40);
 
   const spA = [A.firma, A.web, 'Jens Winter', A.strasse, A.plz_ort];
-  const spB = [`Tel.      ${A.telefon}`, `Fax:      ${A.fax}`, `Mobil: ${A.mobil}`, A.web2, `Email: ${A.email}`];
+  const spB = [`Mobil: ${A.mobil}`, A.web2, `Email: ${A.email}`];
   const spC = [A.bank, `Blz.:`, `Konto:`, `BIC:`, `IBAN:`];
   const spCw = ['', A.blz, A.konto, A.bic, A.iban];
   const spD = [A.finanzamt, 'Steuernummer', A.steuernummer];

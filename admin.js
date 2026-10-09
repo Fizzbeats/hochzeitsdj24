@@ -149,7 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
              entertainment: l.entertainment, kinderanimation: l.kinderanimation,
              open_end: e.open_end,
              fotobox: l.fotobox, fotobox_variante: l.fotobox_variante,
-             remix: l.remix, floorspots: l.floorspots, rabatt: p.rabatt || 0,
+             remix: l.remix, floorspots: l.floorspots, audio_gaestebuch: l.audio_gaestebuch, mini_disco: l.mini_disco,
+             rabatt: p.rabatt || 0,
              remixKorrekturenExtra: p.remix_korrekturen_extra || 0 };
   };
 
@@ -350,12 +351,15 @@ document.addEventListener('DOMContentLoaded', () => {
       zeile('Aufbau', `${e.aufbau_von || ''} – ${e.aufbau_bis || ''} Uhr`) +
       zeile('Empfang / Dinner', `${e.empfang_von || ''} – ${e.empfang_bis || ''} Uhr`) +
       zeile('Party', e.open_end ? `ab ${e.party_von} Uhr, Open End` : `${e.party_von || ''} – ${e.party_bis || ''} Uhr`) +
+      zeile('Gewünschter DJ', { egal: 'Keine Präferenz', jens: 'Jens Winter (DJ Double J)', nico: 'Nico Mahn (DJ Boofy)', markus: 'Markus Schaufuss (DJ Markx)' }[l.dj_wunsch] || 'Keine Präferenz') +
       zeile('Technik', l.technik ? `Variante ${l.technik_variante || 'A'}` : 'Eigene Technik') +
       zeile('Programm', ja(l.entertainment)) +
       zeile('Kinderanimation', ja(l.kinderanimation)) +
       zeile('Fotobox', l.fotobox_variante === 'deluxe' ? 'Deluxe' : l.fotobox_variante === 'standard' ? 'Standard' : (l.fotobox ? 'Ja' : '—')) +
       zeile('Hochzeitstanz Produktion', ja(l.remix)) +
-      zeile('Floorspot-Lichter', ja(l.floorspots));
+      zeile('Floorspot-Lichter', ja(l.floorspots)) +
+      zeile('Audio-Gästebuch', ja(l.audio_gaestebuch)) +
+      zeile('Mini-Disco für die Kinder', ja(l.mini_disco));
 
     $('detailMusik').innerHTML =
       zeile('Eröffnungstanz', l.eroeffnungstanz) + zeile('Musikrichtungen', m.stile) +
@@ -429,6 +433,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $('pOpenEnd').value = p.open_end ?? CONFIG.preise.open_end;
     $('pKinderanimation').value = p.kinderanimation ?? CONFIG.preise.kinderanimation;
     $('pFloorspots').value = p.floorspots ?? CONFIG.preise.floorspots;
+    $('pAudioGaestebuch').value = p.audio_gaestebuch ?? CONFIG.preise.audio_gaestebuch;
+    $('pMiniDisco').value = p.mini_disco ?? CONFIG.preise.mini_disco;
+    $('pTechnikController').value = p.technik_controller ?? CONFIG.preise.technik_controller;
 
     const fotoDeluxe = l.fotobox_variante === 'deluxe';
     $('pFotoboxLabel').textContent = `Fotobox ${fotoDeluxe ? 'Deluxe' : 'Standard'} (€)`;
@@ -564,6 +571,9 @@ document.addEventListener('DOMContentLoaded', () => {
     open_end: parseFloat($('pOpenEnd').value) || 0,
     kinderanimation: parseFloat($('pKinderanimation').value) || 0,
     floorspots: parseFloat($('pFloorspots').value) || 0,
+    audio_gaestebuch: parseFloat($('pAudioGaestebuch').value) || 0,
+    mini_disco: parseFloat($('pMiniDisco').value) || 0,
+    technik_controller: parseFloat($('pTechnikController').value) || 0,
     fotobox: parseFloat($('pFotobox').value) || 0,
     fotobox_standard: parseFloat($('pFotobox').value) || 0,
     fotobox_deluxe: parseFloat($('pFotobox').value) || 0,
@@ -588,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
       z(`davon ${p.mwst_satz}% MwSt. enthalten`, euro(r.mwst));
   }
 
-  ['pPaket','satzEmpfang','satzParty','pTechnik','pEntertainment','pOpenEnd','pKinderanimation','pFloorspots','pFotobox','pRemix','pRemixKorrektur','remixKorrekturenExtra','rabatt']
+  ['pPaket','satzEmpfang','satzParty','pTechnik','pEntertainment','pOpenEnd','pKinderanimation','pFloorspots','pAudioGaestebuch','pMiniDisco','pTechnikController','pFotobox','pRemix','pRemixKorrektur','remixKorrekturenExtra','rabatt']
     .forEach(id => $(id).addEventListener('input', rechne));
 
   /* ---------- PDF, Freigabe, Zahlung, Löschen ---------- */

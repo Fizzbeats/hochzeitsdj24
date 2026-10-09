@@ -12,12 +12,10 @@ const CONFIG = {
     strasse: 'Beyerstraße 31',
     plz_ort: '09113 Chemnitz',
     kuenstlername: 'Dee Jay Double J',
-    telefon: '0371 - 46404880',
-    fax: '03212 - 4584001',
     mobil: '0176 – 77 444 888',
     web: 'www.HochzeitsDJ24.de',
     web2: 'www.dj-double-j.de',
-    email: 'jenswinter@email.de',
+    email: 'Hochzeitsdj24@email.de',
     bank: 'Postbank',
     blz: '100 100 10',
     konto: '692 17 11 38',
@@ -39,6 +37,9 @@ const CONFIG = {
     entertainment: 100.00,      // Pauschale Entertainmentprogramm
     kinderanimation: 50.00,     // 30–60 Minuten Programm, 50–250 € je nach Umfang (Ansatz)
     floorspots: 100.00,         // Floorspot-Lichter in Wunschfarbe, zubuchbar unabhängig von der Technik-Variante
+    audio_gaestebuch: 50.00,    // Audio-Gästebuch, pauschal
+    mini_disco: 50.00,          // Mini-Disco für die Kinder, 20–30 Minuten, pauschal
+    technik_controller: 35.00,  // "Ohne Technik, nur Controller" — eigene Anlage vorhanden, wir bringen nur den Controller mit
     open_end: 100.00,           // Party Open End, pauschal ab 1 Uhr
     fotobox: 0.00,              // veraltet, bleibt für alte Anfragen
     fotobox_standard: 200.00,   // digitale Bilder per E-Mail, ohne Ausdruck
@@ -57,9 +58,9 @@ const CONFIG = {
   pakete: {
     'geburtstag':        { name: 'Geburtstag & Feier',       preis: 500, enthalten: ['technik'],
                             anlaesse: null, partyStundenMax: 5, empfangStundenMax: 0 },
-    'hochzeit-komplett': { name: 'Hochzeit Komplett',        preis: 845, enthalten: ['technik', 'entertainment'],
-                            anlaesse: ['Hochzeit'], partyStundenMax: 8, empfangStundenMax: 1 },
-    'hochzeit-deluxe':   { name: 'Hochzeit Deluxe',          preis: 945, enthalten: ['technik', 'entertainment', 'open_end'],
+    'hochzeit-komplett': { name: 'Hochzeit Komplett',        preis: 700, enthalten: ['technik'],
+                            anlaesse: ['Hochzeit'], partyStundenMax: 7, empfangStundenMax: 1 },
+    'hochzeit-deluxe':   { name: 'Hochzeit Deluxe',          preis: 900, enthalten: ['technik', 'open_end'],
                             anlaesse: ['Hochzeit'], partyStundenMax: 24, empfangStundenMax: 1 },
     'hochzeitstanz':     { name: 'Hochzeitstanz Produktion', preis: 50,  enthalten: ['remix'] }
   },
