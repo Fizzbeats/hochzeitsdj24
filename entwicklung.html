@@ -165,6 +165,8 @@
     <a href="#design">Design-System</a>
     <a href="#seiten">Seitenkarte</a>
     <a href="#funktionen">Funktionen</a>
+    <a href="#leistungen-pflege">Leistungs-Texte</a>
+    <a href="#zitate-pflege">Zitate</a>
     <a href="#faq-pflege">FAQ</a>
     <a href="#stand">Stand</a>
     <a href="#vorschlaege">Vorschläge</a>
@@ -269,6 +271,42 @@
             <li>Einnahmen zählen erst nach Kundenzusage</li>
           </ul>
         </div>
+      </div>
+    </section>
+
+    <section class="bloc" id="leistungen-pflege" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>Leistungs-Texte bearbeiten</h2>
+        <p>
+          Titel, Beschreibung und die drei Stichpunkte der drei Leistungs-Blöcke auf der
+          Startseite (Hochzeiten / Firmenevents / Personalisierte Remixe) — landet live auf
+          der Startseite. Die Bilder dazu bleiben fest, die tauschst du wie gewohnt als Datei aus.
+          Je Stichpunkt eine eigene Zeile.
+        </p>
+      </div>
+      <div id="leistungenListeEntw">
+        <p class="live-hinweis">Wird geladen …</p>
+      </div>
+    </section>
+
+    <section class="bloc" id="zitate-pflege" style="scroll-margin-top:120px">
+      <div class="bloc__kopf">
+        <h2>Kundenzitate bearbeiten</h2>
+        <p>Die drei Zitat-Karten auf der Startseite — landet live dort.</p>
+      </div>
+      <div id="zitateListeEntw">
+        <p class="live-hinweis">Wird geladen …</p>
+      </div>
+      <div class="faq-neu">
+        <p style="font-weight:600;margin-bottom:14px">Neues Zitat hinzufügen</p>
+        <form id="zitatNeuForm">
+          <label for="zitatNeuText">Zitat</label>
+          <textarea id="zitatNeuText" required></textarea>
+          <label for="zitatNeuName">Name (und optional Ort)</label>
+          <input id="zitatNeuName" required>
+          <button type="submit" class="btn btn--gold">Hinzufügen</button>
+          <span class="faq-karte__status" id="zitatNeuStatus"></span>
+        </form>
       </div>
     </section>
 

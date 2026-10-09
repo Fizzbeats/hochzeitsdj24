@@ -180,6 +180,75 @@ select * from (values
 ) as v(reihenfolge, frage, antwort)
 where not exists (select 1 from public.faq);
 
+-- ---------- Kundenzitate (bearbeitbar im Entwickler-Bereich) ----------
+create table if not exists public.zitate (
+  id          uuid primary key default gen_random_uuid(),
+  reihenfolge int  not null default 0,
+  text        text not null,
+  name        text not null,
+  geaendert_am timestamptz not null default now()
+);
+
+create index if not exists zitate_reihenfolge_idx on public.zitate (reihenfolge);
+
+alter table public.zitate enable row level security;
+
+drop policy if exists "zitate lesen" on public.zitate;
+create policy "zitate lesen" on public.zitate
+  for select to anon, authenticated using (true);
+
+drop policy if exists "zitate verwalten" on public.zitate;
+create policy "zitate verwalten" on public.zitate
+  for all to authenticated
+  using (public.ist_verwalter()) with check (public.ist_verwalter());
+
+insert into public.zitate (reihenfolge, text, name)
+select * from (values
+  (0, 'Die Tanzfläche war den ganzen Abend voll — und niemand hat gemerkt, wie viel Planung dahintersteckt.', 'Julia & Thomas, Schloss Klaffenbach'),
+  (1, 'Du hast unseren Abend wieder wunderbar musikalisch gestaltet.', 'Alexandra'),
+  (2, 'Es war wirklich eine mega Stimmung … herzlichen Dank für Deine wunderbare Musik.', 'Isabel')
+) as v(reihenfolge, text, name)
+where not exists (select 1 from public.zitate);
+
+-- ---------- Leistungs-Texte (bearbeitbar im Entwickler-Bereich) ----------
+-- Nur die Texte — die zugehörigen Bilder bleiben fest im Code, da deren
+-- Austausch ohnehin über Dateien läuft, nicht über Texteingabe.
+create table if not exists public.leistungen (
+  id          uuid primary key default gen_random_uuid(),
+  reihenfolge int  not null default 0,
+  titel       text not null,
+  text        text not null,
+  bullets     text[] not null default '{}',
+  geaendert_am timestamptz not null default now()
+);
+
+create index if not exists leistungen_reihenfolge_idx on public.leistungen (reihenfolge);
+
+alter table public.leistungen enable row level security;
+
+drop policy if exists "leistungen lesen" on public.leistungen;
+create policy "leistungen lesen" on public.leistungen
+  for select to anon, authenticated using (true);
+
+drop policy if exists "leistungen verwalten" on public.leistungen;
+create policy "leistungen verwalten" on public.leistungen
+  for all to authenticated
+  using (public.ist_verwalter()) with check (public.ist_verwalter());
+
+insert into public.leistungen (reihenfolge, titel, text, bullets)
+select * from (values
+  (0, 'Hochzeiten',
+   'Rund 25 Hochzeiten begleiten wir jedes Jahr — und trotzdem ist keine wie die andere. Wir setzen uns vorher mit Ihnen zusammen, sprechen mit Ihren Trauzeugen und wissen am großen Tag genau, wann Ihr Lied dran ist. Sie müssen an nichts denken.',
+   array['Persönliches Musikprofil nach Ihren Wünschen', 'Stilvolle Moderation nach Ihren Vorgaben', 'Zwei Technik-Varianten: kompakt mit Funkmikrofon — oder groß mit vier Funkmikrofonen']),
+  (1, 'Firmenevents & Geburtstage',
+   'Eine Firmenfeier tickt anders als eine Hochzeit — und ein 70. Geburtstag anders als beides. Wir schauen, wer im Raum ist, und spielen danach: beim Essen zurückhaltend, auf der Tanzfläche mit allem, was dazugehört.',
+   array['Abgestimmte Hintergrundmusik für Empfang und Dinner', 'Moderation für Reden, Ehrungen und Programmpunkte', 'Deko-Licht, Floorspots in Wunschfarbe optional zubuchbar']),
+  (2, 'Personalisierte Remixe',
+   'Ihr Lied, aber so, wie es sonst niemand hat: Wir bauen den Titel für Ihren ersten Tanz um — langsamer zum Einstieg, mit eigenem Arrangement oder fließendem Übergang in die Party. Davon reden Ihre Gäste noch Jahre später.',
+   array['Individuelles Arrangement Ihres Wunschtitels', 'Abstimmung auf Ihre Choreografie', 'Auf Wunsch als Aufnahme für Sie zum Behalten'])
+) as v(reihenfolge, titel, text, bullets)
+where not exists (select 1 from public.leistungen);
+
 -- =====================================================
 -- Automatische Löschung (DSGVO)
 -- Benötigt die Erweiterung pg_cron (in Supabase aktivierbar)

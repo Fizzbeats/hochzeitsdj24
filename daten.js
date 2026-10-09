@@ -319,59 +319,81 @@ const DB = (() => {
     localStorage.setItem('hdj24_profil_' + nutzer.email, JSON.stringify({ ...bisher, ...felder }));
   }
 
-  /* ---------- FAQ (bearbeitbar im Entwickler-Bereich) ----------
-     Öffentlich lesbar (auch ohne Anmeldung, für die Startseite), nur für
-     Verwalter/Entwickler schreibbar — die Datenbank setzt das über die
-     Zeilensicherheit durch, nicht dieser Code. */
+  /* ---------- FAQ, Kundenzitate, Leistungs-Texte (bearbeitbar) ----------
+     Alle drei öffentlich lesbar (auch ohne Anmeldung, für die Startseite),
+     nur für Verwalter/Entwickler schreibbar — die Datenbank setzt das über
+     die Zeilensicherheit durch, nicht dieser Code. Gemeinsame Hilfen weiter
+     unten (_tabelleLaden etc.), damit nicht dreimal derselbe Code steht. */
 
-  async function faqLaden() {
+  const faqLaden = () => _tabelleLaden('faq', 'reihenfolge');
+  const faqErstellen = (frage, antwort, reihenfolge) => _tabelleErstellen('faq', { frage, antwort, reihenfolge });
+  const faqSpeichern = (faqId, felder) => _tabelleSpeichern('faq', faqId, felder);
+  const faqLoeschen = faqId => _tabelleLoeschen('faq', faqId);
+
+  /* ---------- Kundenzitate & Leistungs-Texte (bearbeitbar) ----------
+     Gleiches Prinzip wie die FAQ: eine kleine, generische Hilfe statt für
+     jede Tabelle denselben Lade-/Speichern-/Löschen-Code zu wiederholen. */
+
+  const SCHLUESSEL_FUER = { faq: 'hdj24_faq', zitate: 'hdj24_zitate', leistungen: 'hdj24_leistungen' };
+
+  async function _tabelleLaden(tabelle, sortierfeld) {
     const c = sb();
     if (c) {
-      const { data, error } = await c.from('faq').select('*').order('reihenfolge');
+      const { data, error } = await c.from(tabelle).select('*').order(sortierfeld);
       if (error) throw error;
       return data;
     }
-    return JSON.parse(localStorage.getItem('hdj24_faq') || 'null');
+    return JSON.parse(localStorage.getItem(SCHLUESSEL_FUER[tabelle]) || 'null');
   }
 
-  async function faqErstellen(frage, antwort, reihenfolge) {
+  async function _tabelleErstellen(tabelle, felder) {
     const c = sb();
     if (c) {
-      const { data, error } = await c.from('faq')
-        .insert({ frage, antwort, reihenfolge }).select().single();
+      const { data, error } = await c.from(tabelle).insert(felder).select().single();
       if (error) throw error;
       return data;
     }
-    const alle = JSON.parse(localStorage.getItem('hdj24_faq') || '[]');
-    const eintrag = { id: id(), frage, antwort, reihenfolge };
+    const alle = JSON.parse(localStorage.getItem(SCHLUESSEL_FUER[tabelle]) || '[]');
+    const eintrag = { id: id(), ...felder };
     alle.push(eintrag);
-    localStorage.setItem('hdj24_faq', JSON.stringify(alle));
+    localStorage.setItem(SCHLUESSEL_FUER[tabelle], JSON.stringify(alle));
     return eintrag;
   }
 
-  async function faqSpeichern(faqId, felder) {
+  async function _tabelleSpeichern(tabelle, zeilenId, felder) {
     const c = sb();
     if (c) {
-      const { error } = await c.from('faq')
-        .update({ ...felder, geaendert_am: new Date().toISOString() }).eq('id', faqId);
+      const { error } = await c.from(tabelle)
+        .update({ ...felder, geaendert_am: new Date().toISOString() }).eq('id', zeilenId);
       if (error) throw error;
       return;
     }
-    const alle = JSON.parse(localStorage.getItem('hdj24_faq') || '[]');
-    const i = alle.findIndex(f => f.id === faqId);
-    if (i > -1) { alle[i] = { ...alle[i], ...felder }; localStorage.setItem('hdj24_faq', JSON.stringify(alle)); }
+    const alle = JSON.parse(localStorage.getItem(SCHLUESSEL_FUER[tabelle]) || '[]');
+    const i = alle.findIndex(z => z.id === zeilenId);
+    if (i > -1) { alle[i] = { ...alle[i], ...felder }; localStorage.setItem(SCHLUESSEL_FUER[tabelle], JSON.stringify(alle)); }
   }
 
-  async function faqLoeschen(faqId) {
+  async function _tabelleLoeschen(tabelle, zeilenId) {
     const c = sb();
     if (c) {
-      const { error } = await c.from('faq').delete().eq('id', faqId);
+      const { error } = await c.from(tabelle).delete().eq('id', zeilenId);
       if (error) throw error;
       return;
     }
-    const alle = JSON.parse(localStorage.getItem('hdj24_faq') || '[]');
-    localStorage.setItem('hdj24_faq', JSON.stringify(alle.filter(f => f.id !== faqId)));
+    const alle = JSON.parse(localStorage.getItem(SCHLUESSEL_FUER[tabelle]) || '[]');
+    localStorage.setItem(SCHLUESSEL_FUER[tabelle], JSON.stringify(alle.filter(z => z.id !== zeilenId)));
   }
+
+  const zitateLaden = () => _tabelleLaden('zitate', 'reihenfolge');
+  const zitateErstellen = (text, name, reihenfolge) => _tabelleErstellen('zitate', { text, name, reihenfolge });
+  const zitateSpeichern = (zId, felder) => _tabelleSpeichern('zitate', zId, felder);
+  const zitateLoeschen = zId => _tabelleLoeschen('zitate', zId);
+
+  const leistungenLaden = () => _tabelleLaden('leistungen', 'reihenfolge');
+  const leistungenErstellen = (titel, text, bullets, reihenfolge) =>
+    _tabelleErstellen('leistungen', { titel, text, bullets, reihenfolge });
+  const leistungenSpeichern = (lId, felder) => _tabelleSpeichern('leistungen', lId, felder);
+  const leistungenLoeschen = lId => _tabelleLoeschen('leistungen', lId);
 
   return {
     konfiguriert, speichereAnfrage, ladeAnfragen, ladeAnfrage,
@@ -379,7 +401,9 @@ const DB = (() => {
     chatSenden, chatVon,
     registrieren, anmelden, abmelden, aktuellerNutzer, istVerwalter, istEntwickler,
     profilLesen, profilSchreiben,
-    faqLaden, faqErstellen, faqSpeichern, faqLoeschen
+    faqLaden, faqErstellen, faqSpeichern, faqLoeschen,
+    zitateLaden, zitateErstellen, zitateSpeichern, zitateLoeschen,
+    leistungenLaden, leistungenErstellen, leistungenSpeichern, leistungenLoeschen
   };
 })();
 

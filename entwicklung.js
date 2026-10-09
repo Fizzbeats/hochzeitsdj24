@@ -148,6 +148,141 @@ document.addEventListener('DOMContentLoaded', () => {
 
   ladeFaqEditor();
 
+  /* ---------- Kundenzitate bearbeiten ---------- */
+
+  async function ladeZitateEditor() {
+    const container = $('zitateListeEntw');
+    let zitate;
+    try {
+      zitate = await DB.zitateLaden();
+    } catch (e) {
+      container.innerHTML = `<p class="live-hinweis">Konnte nicht geladen werden: ${e.message}</p>`;
+      return;
+    }
+    if (!zitate || !zitate.length) {
+      container.innerHTML = '<p class="live-hinweis">Noch keine Zitate in der Datenbank — unten eins hinzufügen.</p>';
+      return;
+    }
+    container.innerHTML = zitate.map(z => `
+      <div class="faq-karte" data-id="${z.id}">
+        <label>Zitat</label>
+        <textarea class="zitat-text">${z.text.replace(/</g, '&lt;')}</textarea>
+        <label>Name (und optional Ort)</label>
+        <input class="zitat-name" value="${z.name.replace(/"/g, '&quot;')}">
+        <div class="faq-karte__zeile">
+          <button type="button" class="btn btn--line zitat-speichern">Speichern</button>
+          <span class="faq-karte__status"></span>
+          <button type="button" class="faq-karte__loeschen">Löschen</button>
+        </div>
+      </div>`).join('');
+  }
+
+  $('zitateListeEntw').addEventListener('click', async e => {
+    const karte = e.target.closest('.faq-karte');
+    if (!karte) return;
+    const zId = karte.dataset.id;
+    const status = karte.querySelector('.faq-karte__status');
+
+    if (e.target.classList.contains('zitat-speichern')) {
+      status.textContent = 'Speichert …';
+      try {
+        await DB.zitateSpeichern(zId, {
+          text: karte.querySelector('.zitat-text').value.trim(),
+          name: karte.querySelector('.zitat-name').value.trim()
+        });
+        status.textContent = 'Gespeichert ✓';
+        setTimeout(() => { if (status.textContent === 'Gespeichert ✓') status.textContent = ''; }, 2500);
+      } catch (err) {
+        status.textContent = 'Fehler: ' + err.message;
+      }
+    }
+
+    if (e.target.classList.contains('faq-karte__loeschen')) {
+      if (!confirm('Dieses Zitat wirklich von der Startseite entfernen?')) return;
+      try {
+        await DB.zitateLoeschen(zId);
+        karte.remove();
+      } catch (err) {
+        status.textContent = 'Fehler: ' + err.message;
+      }
+    }
+  });
+
+  $('zitatNeuForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const textFeld = $('zitatNeuText'), nameFeld = $('zitatNeuName'), status = $('zitatNeuStatus');
+    const text = textFeld.value.trim(), name = nameFeld.value.trim();
+    if (!text || !name) return;
+    status.textContent = 'Wird hinzugefügt …';
+    try {
+      const anzahl = $('zitateListeEntw').querySelectorAll('.faq-karte').length;
+      await DB.zitateErstellen(text, name, anzahl);
+      textFeld.value = '';
+      nameFeld.value = '';
+      status.textContent = '';
+      await ladeZitateEditor();
+    } catch (err) {
+      status.textContent = 'Fehler: ' + err.message;
+    }
+  });
+
+  ladeZitateEditor();
+
+  /* ---------- Leistungs-Texte bearbeiten ----------
+     Immer genau drei (an die feste Startseiten-Struktur gebunden) — darum
+     hier kein Hinzufügen/Löschen, nur Bearbeiten der drei vorhandenen. */
+
+  async function ladeLeistungenEditor() {
+    const container = $('leistungenListeEntw');
+    let leistungen;
+    try {
+      leistungen = await DB.leistungenLaden();
+    } catch (e) {
+      container.innerHTML = `<p class="live-hinweis">Konnte nicht geladen werden: ${e.message}</p>`;
+      return;
+    }
+    if (!leistungen || !leistungen.length) {
+      container.innerHTML = '<p class="live-hinweis">Noch keine Leistungs-Texte in der Datenbank.</p>';
+      return;
+    }
+    container.innerHTML = leistungen.map(l => `
+      <div class="faq-karte" data-id="${l.id}">
+        <label>Titel</label>
+        <input class="leistung-titel" value="${l.titel.replace(/"/g, '&quot;')}">
+        <label>Beschreibung</label>
+        <textarea class="leistung-text">${l.text.replace(/</g, '&lt;')}</textarea>
+        <label>Stichpunkte (eine Zeile je Stichpunkt)</label>
+        <textarea class="leistung-bullets">${(l.bullets || []).join('\n').replace(/</g, '&lt;')}</textarea>
+        <div class="faq-karte__zeile">
+          <button type="button" class="btn btn--line leistung-speichern">Speichern</button>
+          <span class="faq-karte__status"></span>
+        </div>
+      </div>`).join('');
+  }
+
+  $('leistungenListeEntw').addEventListener('click', async e => {
+    if (!e.target.classList.contains('leistung-speichern')) return;
+    const karte = e.target.closest('.faq-karte');
+    const lId = karte.dataset.id;
+    const status = karte.querySelector('.faq-karte__status');
+    status.textContent = 'Speichert …';
+    try {
+      const bullets = karte.querySelector('.leistung-bullets').value
+        .split('\n').map(z => z.trim()).filter(Boolean);
+      await DB.leistungenSpeichern(lId, {
+        titel: karte.querySelector('.leistung-titel').value.trim(),
+        text: karte.querySelector('.leistung-text').value.trim(),
+        bullets
+      });
+      status.textContent = 'Gespeichert ✓';
+      setTimeout(() => { if (status.textContent === 'Gespeichert ✓') status.textContent = ''; }, 2500);
+    } catch (err) {
+      status.textContent = 'Fehler: ' + err.message;
+    }
+  });
+
+  ladeLeistungenEditor();
+
   /* ---------- Hilfen ---------- */
 
   const dateiVorhanden = async pfad => {
